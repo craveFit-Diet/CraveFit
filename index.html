@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CraveFit - Elite Fitness & Nutrition Coaching</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#121212',
+                        cardBg: '#1e1e1e',
+                        cardBorder: '#2d2d2d',
+                        brandYellow: '#FFD700',
+                        brandYellowLight: '#FFF2B2',
+                        brandYellowHover: '#e6c200',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js for Visualizing Macros & Progress -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #121212;
+            color: #f3f4f6;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #121212;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333333;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #FFD700;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(4px);
+        }
+    </style>
+</head>
+<body class="bg-darkBg text-gray-100 pb-24 antialiased selection:bg-brandYellow selection:text-black">
+
+    <!-- TOP HEADER BAR -->
+    <header class="sticky top-0 z-40 bg-darkBg/95 border-b border-cardBorder px-4 py-3 flex items-center justify-between backdrop-blur-md">
+        <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-xl bg-brandYellow flex items-center justify-center text-black font-extrabold text-lg shadow-lg shadow-brandYellow/20">
+                CF
+            </div>
+            <div>
+                <h1 class="font-bold text-base tracking-wide text-white flex items-center gap-1.5">
+                    CRAVEFIT <span class="text-xs px-2 py-0.5 rounded-full bg-brandYellow/20 text-brandYellow font-semibold">Pro</span>
+                </h1>
+                <p id="headerSubtitle" class="text-xs text-gray-400">Coach Akash Kumar • Pune</p>
+            </div>
+        </div>
+
+        <div class="flex items-center space-x-2">
+            <!-- Client Switcher / Profile Badge -->
+            <button onclick="openClientModal()" class="flex items-center gap-2 bg-cardBg border border-cardBorder px-3 py-1.5 rounded-full text-xs font-medium text-gray-200 hover:border-brandYellow transition">
+                <i class="fa-solid fa-users text-brandYellow"></i>
+                <span id="activeClientBadge" class="truncate max-w-[90px]">Akash Kumar</span>
+                <i class="fa-solid fa-chevron-down text-[10px] text-gray-400"></i>
+            </button>
+
+            <!-- Notification Bell with Badge -->
+            <button onclick="openNotificationsModal()" class="relative w-9 h-9 rounded-full bg-cardBg border border-cardBorder flex items-center justify-center text-gray-300 hover:text-brandYellow hover:border-brandYellow transition">
+                <i class="fa-solid fa-bell text-sm"></i>
+                <span id="notificationBadgeCount" class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 text-[10px] font-bold text-white flex items-center justify-center">2</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="max-w-md mx-auto px-4 pt-4">
+
+        <!-- ================= TAB 1: HOME ================= -->
+        <div id="tab-home" class="space-y-5 tab-content">
+            <!-- Hero Carousel Banner -->
+            <div class="relative rounded-2xl overflow-hidden border border-cardBorder bg-cardBg shadow-xl">
+                <div id="heroCarousel" class="flex transition-transform duration-500 ease-out">
+                    <!-- Slide 1 -->
+                    <div class="min-w-full p-5 bg-gradient-to-r from-neutral-900 to-zinc-900 relative">
+                        <div class="max-w-[65%]">
+                            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-brandYellow/20 text-brandYellow">Elite Program</span>
+                            <h2 class="text-xl font-extrabold text-white mt-2 leading-tight">Transform Your Physique in 12 Weeks</h2>
+                            <p class="text-xs text-gray-300 mt-1">Custom macros, strength training & 1-on-1 WhatsApp coaching.</p>
+                            <button onclick="switchTab('coach')" class="mt-3 px-4 py-2 rounded-xl bg-brandYellow text-black font-bold text-xs shadow-md hover:bg-brandYellowHover transition">Explore Plans</button>
+                        </div>
+                    </div>
+                    <!-- Slide 2 -->
+                    <div class="min-w-full p-5 bg-gradient-to-r from-zinc-900 to-neutral-900 relative">
+                        <div class="max-w-[65%]">
+                            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-brandYellowLight/20 text-brandYellowLight">New Launch</span>
+                            <h2 class="text-xl font-extrabold text-white mt-2 leading-tight">MAAti Cloud Kitchen</h2>
+                            <p class="text-xs text-gray-300 mt-1">Clean, macro-counted high protein meals delivered in Pune.</p>
+                            <button onclick="openModal('cloudKitchenModal')" class="mt-3 px-4 py-2 rounded-xl bg-brandYellowLight text-black font-bold text-xs shadow-md hover:bg-brandYellow transition">Order Meals</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Carousel Dots -->
+                <div class="absolute bottom-2 right-3 flex space-x-1.5">
+                    <button onclick="setHeroSlide(0)" class="w-2 h-2 rounded-full bg-brandYellow transition" id="dot0"></button>
+                    <button onclick="setHeroSlide(1)" class="w-2 h-2 rounded-full bg-gray-600 transition" id="dot1"></button>
+                </div>
+            </div>
+
+            <!-- Quick Access Circular Menu -->
+            <div class="grid grid-cols-4 gap-3 text-center">
+                <button onclick="openModal('macroCalcModal')" class="flex flex-col items-center group">
+                    <div class="w-14 h-14 rounded-2xl bg-cardBg border border-cardBorder flex items-center justify-center text-brandYellow group-hover:border-brandYellow transition shadow-md">
+                        <i class="fa-solid fa-chart-pie text-lg"></i>
+                    </div>
+                    <span class="text-[11px] font-medium text-gray-300 mt-1.5">Macros</span>
+                </button>
+                <button onclick="openModal('goalCalcModal')" class="flex flex-col items-center group">
+                    <div class="w-14 h-14 rounded-2xl bg-cardBg border border-cardBorder flex items-center justify-center text-brandYellowLight group-hover:border-brandYellowLight transition shadow-md">
+                        <i class="fa-solid fa-bullseye text-lg"></i>
+                    </div>
+                    <span class="text-[11px] font-medium text-gray-300 mt-1.5">Goal Calc</span>
+                </button>
+                <button onclick="openModal('bmrCalcModal')" class="flex flex-col items-center group">
+                    <div class="w-14 h-14 rounded-2xl bg-cardBg border border-cardBorder flex items-center justify-center text-brandYellow group-hover:border-brandYellow transition shadow-md">
+                        <i class="fa-solid fa-fire text-lg"></i>
+                    </div>
+                    <span class="text-[11px] font-medium text-gray-300 mt-1.5">BMR</span>
+                </button>
+                <button onclick="switchTab('coach')" class="flex flex-col items-center group">
+                    <div class="w-14 h-14 rounded-2xl bg-cardBg border border-cardBorder flex items-center justify-center text-brandYellowLight group-hover:border-brandYellowLight transition shadow-md">
+                        <i class="fa-solid fa-dumbbell text-lg"></i>
+                    </div>
+                    <span class="text-[11px] font-medium text-gray-300 mt-1.5">Coaching</span>
+                </button>
+            </div>
+
+            <!-- Success Stories Avatars -->
+            <div>
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="font-bold text-sm text-white">Success Stories & Reviews</h3>
+                    <span class="text-xs text-brandYellow font-medium cursor-pointer" onclick="openTestimonialsModal()">View All</span>
+                </div>
+                <div class="flex space-x-3 overflow-x-auto no-scrollbar pb-1">
+                    <div onclick="openTestimonialDetail('Priya Sharma', '-12 kg Fat Loss', 'Coach Akash structured my meals and training. The WhatsApp check-ins kept me accountable every single day!')" class="flex-shrink-0 flex flex-col items-center cursor-pointer">
+                        <div class="w-14 h-14 rounded-full p-0.5 bg-gradient-to-tr from-brandYellow to-brandYellowLight">
+                            <div class="w-full h-full rounded-full bg-cardBg flex items-center justify-center font-bold text-white text-sm">PS</div>
+                        </div>
+                        <span class="text-[11px] text-gray-300 mt-1 font-medium">Priya S.</span>
+                    </div>
+                    <div onclick="openTestimonialDetail('Rahul Verma', '+6 kg Muscle Gain', 'The macro tracker and customized diet plans made bulking so clean and structured. Best coach in Pune!')" class="flex-shrink-0 flex flex-col items-center cursor-pointer">
+                        <div class="w-14 h-14 rounded-full p-0.5 bg-gradient-to-tr from-brandYellow to-brandYellowLight">
+                            <div class="w-full h-full rounded-full bg-cardBg flex items-center justify-center font-bold text-white text-sm">RV</div>
+                        </div>
+                        <span class="text-[11px] text-gray-300 mt-1 font-medium">Rahul V.</span>
+                    </div>
+                    <div onclick="openTestimonialDetail('Kabir Mehta', 'Reversed Diabetes', 'Lost 14kgs and brought my HbA1c down from 8.2 to 5.6. Akash understands clinical nutrition deeply.')" class="flex-shrink-0 flex flex-col items-center cursor-pointer">
+                        <div class="w-14 h-14 rounded-full p-0.5 bg-gradient-to-tr from-brandYellow to-brandYellowLight">
+                            <div class="w-full h-full rounded-full bg-cardBg flex items-center justify-center font-bold text-white text-sm">KM</div>
+                        </div>
+                        <span class="text-[11px] text-gray-300 mt-1 font-medium">Kabir M.</span>
+                    </div>
+                    <div onclick="openTestimonialDetail('Ananya Iyer', 'PCOS Management', 'Sustainable fat loss without starving. The 2-week diet updates kept my metabolism high all through!')" class="flex-shrink-0 flex flex-col items-center cursor-pointer">
+                        <div class="w-14 h-14 rounded-full p-0.5 bg-gradient-to-tr from-brandYellow to-brandYellowLight">
+                            <div class="w-full h-full rounded-full bg-cardBg flex items-center justify-center font-bold text-white text-sm">AI</div>
+                        </div>
+                        <span class="text-[11px] text-gray-300 mt-1 font-medium">Ananya I.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Daily Tracker Quick Widget -->
+            <div class="bg-cardBg border border-cardBorder rounded-2xl p-4 shadow-xl">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="font-bold text-sm text-white flex items-center gap-2">
+                        <i class="fa-solid fa-chart-line text-brandYellow"></i> Today's Summary
+                    </h3>
+                    <button onclick="switchTab('health')" class="text-xs text-brandYellow font-semibold hover:underline">Log Details &rarr;</button>
+                </div>
+                <div class="grid grid-cols-3 gap-2 text-center">
+                    <div class="bg-darkBg/60 border border-cardBorder p-2.5 rounded-xl">
+                        <span class="text-[10px] text-gray-400 block">Calories</span>
+                        <span id="summaryCalories" class="text-sm font-bold text-white">0 / 2,100</span>
+                    </div>
+                    <div class="bg-darkBg/60 border border-cardBorder p-2.5 rounded-xl">
+                        <span class="text-[10px] text-gray-400 block">Weight</span>
+                        <span id="summaryWeight" class="text-sm font-bold text-white">74.5 kg</span>
+                    </div>
+                    <div class="bg-darkBg/60 border border-cardBorder p-2.5 rounded-xl">
+                        <span class="text-[10px] text-gray-400 block">Water</span>
+                        <span id="summaryWater" class="text-sm font-bold text-white">2.5 L</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= TAB 2: MY HEALTH (Tracker & Food Logging) ================= -->
+        <div id="tab-health" class="space-y-5 tab-content hidden">
+            <!-- Header & Date Toggle -->
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-lg font-extrabold text-white">Daily Progress & Macros</h2>
+                    <p class="text-xs text-gray-400">Track nutrition, workouts & body measurements</p>
+                </div>
+                <button onclick="openModal('dailyUpdateModal')" class="bg-brandYellow text-black px-3 py-1.5 rounded-xl text-xs font-bold shadow-md hover:bg-brandYellowHover transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-plus text-[10px]"></i> Daily Update
+                </button>
+            </div>
+
+            <!-- Calorie & Macro Progress Card -->
+            <div class="bg-cardBg border border-cardBorder rounded-2xl p-5 shadow-xl">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <span class="text-xs text-gray-400 block uppercase tracking-wider font-medium">Nutrition Balance</span>
+                        <h3 class="text-xl font-extrabold text-white"><span id="consumedCalories">0</span> <span class="text-xs text-gray-400 font-normal">/ <span id="targetCalories">2100</span> kcal</span></h3>
+                    </div>
+                    <button onclick="openModal('foodSearchModal')" class="bg-brandYellow/20 border border-brandYellow text-brandYellow px-3 py-1.5 rounded-xl text-xs font-bold hover:bg-brandYellow hover:text-black transition flex items-center gap-1">
+                        <i class="fa-solid fa-utensils"></i> Add Food
+                    </button>
+                </div>
+
+                <!-- Macro Circular Chart & Breakdown -->
+                <div class="grid grid-cols-2 gap-4 items-center">
+                    <div class="relative w-32 h-32 mx-auto">
+                        <canvas id="macroChart"></canvas>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                            <span class="text-xs font-bold text-white" id="macroRemaining">2100</span>
+                            <span class="text-[9px] text-gray-400">Kcal Left</span>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="flex items-center gap-1.5 text-gray-300"><span class="w-2.5 h-2.5 rounded-full bg-red-500"></span> Protein</span>
+                            <span class="font-bold text-white"><span id="consumedProtein">0</span> / <span id="targetProtein">150</span>g</span>
+                        </div>
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="flex items-center gap-1.5 text-gray-300"><span class="w-2.5 h-2.5 rounded-full bg-green-500"></span> Carbs</span>
+                            <span class="font-bold text-white"><span id="consumedCarbs">0</span> / <span id="targetCarbs">210</span>g</span>
+                        </div>
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="flex items-center gap-1.5 text-gray-300"><span class="w-2.5 h-2.5 rounded-full bg-brandYellow"></span> Fats</span>
+                            <span class="font-bold text-white"><span id="consumedFats">0</span> / <span id="targetFats">65</span>g</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Logged Meals Section -->
+            <div class="bg-cardBg border border-cardBorder rounded-2xl p-4 shadow-xl">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="font-bold text-sm text-white">Today's Logged Meals</h3>
+                    <span class="text-xs text-gray-400" id="mealCountText">0 items logged</span>
+                </div>
+                <div id="loggedMealsList" class="space-y-2 max-h-48 overflow-y-auto no-scrollbar">
+                    <div class="text-center py-6 text-gray-500 text-xs italic">No food logged yet. Click "Add Food" above.</div>
+                </div>
+            </div>
+
+            <!-- Measurements & Metrics -->
+            <div class="bg-cardBg border border-cardBorder rounded-2xl p-4 shadow-xl space-y-3">
+                <div class="flex items-center justify-between">
+                    <h3 class="font-bold text-sm text-white">Body Measurements & Vitals</h3>
+                    <button onclick="openModal('dailyUpdateModal')" class="text-xs text-brandYellow font-semibold hover:underline">Update</button>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-darkBg/60 border border-cardBorder p-3 rounded-xl">
+                        <span class="text-[10px] text-gray-400 block">Body Weight</span>
+                        <span id="metricWeight" class="text-base font-bold text-white">74.5 kg</span>
+                    </div>
+                    <div class="bg-darkBg/60 border border-cardBorder p-3 rounded-xl">
+                        <span class="text-[10px] text-gray-400 block">Water Intake</span>
+                        <span id="metricWater" class="text-base font-bold text-white">2.5 Liters</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= TAB 3: COACHING & PLANS ================= -->
+        <div id="tab-coach" class="space-y-5 tab-content hidden">
+            <div>
+                <h2 class="text-lg font-extrabold text-white">Elite Coaching Plans</h2>
+                <p class="text-xs text-gray-400">Personalized 1-on-1 diet & workout coaching by Akash Kumar</p>
+            </div>
+
+            <!-- Plan Card 1 -->
+            <div class="bg-cardBg border-2 border-brandYellow/80 rounded-2xl p-5 shadow-xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 bg-brandYellow text-black text-[10px] font-extrabold px-3 py-1 rounded-bl-xl uppercase tracking-wider">Most Popular</div>
+                <span class="text-xs font-bold text-brandYellow uppercase tracking-wider">3 Months Transformation</span>
+                <h3 class="text-xl font-extrabold text-white mt-1">Advanced Fitness & Nutrition</h3>
+                <div class="my-3 flex items-baseline gap-2">
+                    <span class="text-2xl font-extrabold text-white">₹14,999</span>
+                    <span class="text-xs text-gray-400 line-through">₹24,999</span>
+                    <span class="text-[10px] bg-brandYellow/20 text-brandYellow px-2 py-0.5 rounded font-semibold">Save 40%</span>
+                </div>
+                <ul class="space-y-2 text-xs text-gray-300 mb-4">
+                    <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brandYellow"></i> Custom Macro & Calorie Plan</li>
+                    <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brandYellow"></i> Customized Gym / Home Workout Routine</li>
+                    <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brandYellow"></i> Bi-weekly Diet & Routine Revisions</li>
+                    <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brandYellow"></i> Direct WhatsApp Access with Coach Akash</li>
+                </ul>
+                <button onclick="checkoutPlan('3 Months Elite Transformation', 14999)" class="w-full py-3 rounded-xl bg-brandYellow text-black font-bold text-xs shadow-lg hover:bg-brandYellowHover transition flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-base"></i> Enroll via WhatsApp
+                </button>
+            </div>
+
+            <!-- Plan Card 2 -->
+            <div class="bg-cardBg border border-cardBorder rounded-2xl p-5 shadow-xl">
+                <span class="text-xs font-bold text-brandYellowLight uppercase tracking-wider">1 Month Quick Start</span>
+                <h3 class="text-xl font-extrabold text-white mt-1">Kickstart Shred Program</h3>
+                <div class="my-3 flex items-baseline gap-2">
+                    <span class="text-2xl font-extrabold text-white">₹5,999</span>
+                    <span class="text-xs text-gray-400 line-through">₹8,999</span>
+                </div>
+                <ul class="space-y-2 text-xs text-gray-300 mb-4">
+                    <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brandYellowLight"></i> Initial Diet & Macro Setup</li>
+                    <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brandYellowLight"></i> Weekly Progress Review</li>
+                    <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brandYellowLight"></i> WhatsApp Support</li>
+                </ul>
+                <button onclick="checkoutPlan('1 Month Kickstart Program', 5999)" class="w-full py-3 rounded-xl bg-cardBg border border-brandYellowLight text-brandYellowLight font-bold text-xs hover:bg-brandYellowLight hover:text-black transition flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-base"></i> Enroll via WhatsApp
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= TAB 4: CHAT WITH COACH ================= -->
+        <div id="tab-chat" class="space-y-4 tab-content hidden">
+            <div class="bg-cardBg border border-cardBorder rounded-2xl p-3 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-full bg-brandYellow flex items-center justify-center text-black font-bold">AK</div>
+                    <div>
+                        <h4 class="font-bold text-sm text-white">Coach Akash Kumar</h4>
+                        <span class="text-[10px] text-green-400 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span> Online • Responds in 2 hours</span>
+                    </div>
+                </div>
+                <a href="https://wa.me/919822000000?text=Hi%20Coach%20Akash,%20I%20have%20a%20question%20regarding%20my%20diet%20plan." target="_blank" class="bg-green-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold hover:bg-green-500 transition flex items-center gap-1.5">
+                    <i class="fa-brands fa-whatsapp"></i> WhatsApp
+                </a>
+            </div>
+
+            <!-- Chat Messages Box -->
+            <div id="chatMessagesContainer" class="bg-cardBg border border-cardBorder rounded-2xl p-4 h-80 overflow-y-auto space-y-3 shadow-xl">
+                <div class="flex flex-col space-y-1">
+                    <div class="self-start bg-neutral-800 border border-cardBorder rounded-2xl rounded-tl-none p-3 max-w-[85%] text-xs text-gray-200">
+                        Welcome to CraveFit! I'm Coach Akash. Feel free to log your daily meals, track your macros, or ask me any questions right here. Let's hit your fitness goals together! 💪
+                    </div>
+                    <span class="text-[9px] text-gray-500 ml-1">Today, 09:00 AM</span>
+                </div>
+            </div>
+
+            <!-- Chat Input Bar -->
+            <div class="flex items-center gap-2">
+                <input type="text" id="chatInput" placeholder="Ask Coach Akash anything..." class="flex-1 bg-cardBg border border-cardBorder rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-brandYellow transition">
+                <button onclick="sendChatMessage()" class="bg-brandYellow text-black px-4 py-3 rounded-xl text-xs font-bold hover:bg-brandYellowHover transition shadow-md">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= TAB 5: PROFILE & CLIENTS ================= -->
+        <div id="tab-profile" class="space-y-5 tab-content hidden">
+            <!-- User Profile Header Card -->
+            <div class="bg-cardBg border border-cardBorder rounded-2xl p-5 text-center relative shadow-xl">
+                <div class="absolute top-3 right-3">
+                    <button onclick="openModal('editProfileModal')" class="w-8 h-8 rounded-full bg-darkBg border border-cardBorder flex items-center justify-center text-gray-300 hover:text-brandYellow transition">
+                        <i class="fa-solid fa-pen text-xs"></i>
+                    </button>
+                </div>
+                <div class="w-20 h-20 rounded-full bg-gradient-to-tr from-brandYellow to-brandYellowLight mx-auto flex items-center justify-center text-black font-extrabold text-2xl shadow-lg mb-3" id="profileAvatarInitials">
+                    AK
+                </div>
+                <h3 class="font-extrabold text-lg text-white" id="profileNameDisplay">Akash Kumar</h3>
+                <p class="text-xs text-gray-400 mt-0.5" id="profileEmailDisplay">akash.cravefit@gmail.com</p>
+                <div class="mt-3 inline-block px-3 py-1 rounded-full bg-brandYellow/10 text-brandYellow text-xs font-semibold border border-brandYellow/30">
+                    Active Plan: 3 Months Elite Transformation
+                </div>
+            </div>
+
+            <!-- Client Profiles Switcher & Manager -->
+            <div class="bg-cardBg border border-cardBorder rounded-2xl p-4 shadow-xl space-y-3">
+                <div class="flex items-center justify-between">
+                    <h3 class="font-bold text-sm text-white flex items-center gap-2">
+                        <i class="fa-solid fa-users text-brandYellow"></i> Client Profiles Manager
+                    </h3>
+                    <button onclick="openModal('addClientModal')" class="bg-brandYellow text-black px-2.5 py-1 rounded-lg text-xs font-bold hover:bg-brandYellowHover transition">
+                        <i class="fa-solid fa-plus text-[10px]"></i> Add Client
+                    </button>
+                </div>
+                <p class="text-xs text-gray-400">Switch between profiles or manage multiple client accounts with independent daily logs.</p>
+                <div id="clientProfilesList" class="space-y-2 max-h-48 overflow-y-auto no-scrollbar">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+
+            <!-- App Settings & Tools -->
+            <div class="bg-cardBg border border-cardBorder rounded-2xl p-4 shadow-xl space-y-2">
+                <h3 class="font-bold text-sm text-white mb-2">Calculators & Tools</h3>
+                <button onclick="openModal('macroCalcModal')" class="w-full flex items-center justify-between p-3 rounded-xl bg-darkBg/50 border border-cardBorder hover:border-brandYellow transition text-xs font-medium">
+                    <span class="flex items-center gap-2 text-gray-200"><i class="fa-solid fa-chart-pie text-brandYellow"></i> Macro Calculator</span>
+                    <i class="fa-solid fa-chevron-right text-[10px] text-gray-400"></i>
+                </button>
+                <button onclick="openModal('goalCalcModal')" class="w-full flex items-center justify-between p-3 rounded-xl bg-darkBg/50 border border-cardBorder hover:border-brandYellow transition text-xs font-medium">
+                    <span class="flex items-center gap-2 text-gray-200"><i class="fa-solid fa-bullseye text-brandYellowLight"></i> Goal Weight Calculator</span>
+                    <i class="fa-solid fa-chevron-right text-[10px] text-gray-400"></i>
+                </button>
+                <button onclick="openModal('bmrCalcModal')" class="w-full flex items-center justify-between p-3 rounded-xl bg-darkBg/50 border border-cardBorder hover:border-brandYellow transition text-xs font-medium">
+                    <span class="flex items-center gap-2 text-gray-200"><i class="fa-solid fa-fire text-brandYellow"></i> BMR & TEE Calculator</span>
+                    <i class="fa-solid fa-chevron-right text-[10px] text-gray-400"></i>
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- BOTTOM NAVIGATION BAR -->
+    <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-darkBg/95 border-t border-cardBorder px-4 py-2 flex items-center justify-between z-40 backdrop-blur-md">
+        <button onclick="switchTab('home')" id="nav-home" class="flex flex-col items-center flex-1 py-1 text-brandYellow transition">
+            <i class="fa-solid fa-house text-base"></i>
+            <span class="text-[10px] mt-1 font-medium">Home</span>
+        </button>
+        <button onclick="switchTab('health')" id="nav-health" class="flex flex-col items-center flex-1 py-1 text-gray-400 hover:text-gray-200 transition">
+            <i class="fa-solid fa-heart-pulse text-base"></i>
+            <span class="text-[10px] mt-1 font-medium">My Health</span>
+        </button>
+        <button onclick="switchTab('coach')" id="nav-coach" class="flex flex-col items-center flex-1 py-1 text-gray-400 hover:text-gray-200 transition">
+            <i class="fa-solid fa-dumbbell text-base"></i>
+            <span class="text-[10px] mt-1 font-medium">Get Coach</span>
+        </button>
+        <button onclick="switchTab('chat')" id="nav-chat" class="flex flex-col items-center flex-1 py-1 text-gray-400 hover:text-gray-200 transition">
+            <i class="fa-solid fa-comments text-base"></i>
+            <span class="text-[10px] mt-1 font-medium">Chat</span>
+        </button>
+        <button onclick="switchTab('profile')" id="nav-profile" class="flex flex-col items-center flex-1 py-1 text-gray-400 hover:text-gray-200 transition">
+            <i class="fa-solid fa-user text-base"></i>
+            <span class="text-[10px] mt-1 font-medium">Me</span>
+        </button>
+    </nav>
+
+    <!-- ================= ALL MODALS ================= -->
+
+    <!-- 1. FOOD SEARCH & LOGGING MODAL -->
+    <div id="foodSearchModal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center modal-backdrop hidden">
+        <div class="bg-cardBg border border-cardBorder w-full max-w-md rounded-t-3xl sm:rounded-2xl p-5 space-y-4 max-h-[85vh] overflow-y-auto">
+            <div class="flex items-center justify-between">
+                <h3 class="font-extrabold text-base text-white">Add Food to Log</h3>
+                <button onclick="closeModal('foodSearchModal')" class="w-8 h-8 rounded-full bg-darkBg flex items-center justify-center text-gray-400 hover:text-white">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="relative">
+                <i class="fa-solid fa-search absolute left-3.5 top-3.5 text-gray-400 text-xs"></i>
+                <input type="text" id="foodSearchInput" oninput="filterFoodDatabase()" placeholder="Search 200+ Indian & international foods..." class="w-full bg-darkBg border border-cardBorder rounded-xl pl-10 pr-4 py-3 text-xs text-white focus:outline-none focus:border-brandYellow">
+            </div>
+            <div id="foodSearchResults" class="space-y-2 max-h-60 overflow-y-auto no-scrollbar">
+                <!-- Populated via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. DAILY UPDATE MODAL -->
+    <div id="dailyUpdateModal" class="fixed inset-0 z-50 flex items-center justify-center modal-backdrop hidden">
+        <div class="bg-cardBg border border-cardBorder w-full max-w-sm rounded-2xl p-5 space-y-4">
+            <div class="flex items-center justify-between">
+                <h3 class="font-extrabold text-base text-white">Log Daily Progress</h3>
+                <button onclick="closeModal('dailyUpdateModal')" class="w-8 h-8 rounded-full bg-darkBg flex items-center justify-center text-gray-400 hover:text-white">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="space-y-3">
+                <div>
+                    <label class="text-[11px] text-gray-400 block mb-1">Morning Weight (kg)</label>
+                    <input type="number" step="0.1" id="inputUpdateWeight" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3 py-2 text-xs text-white focus:border-brandYellow focus:outline-none" value="74.5">
+                </div>
+                <div>
+                    <label class="text-[11px] text-gray-400 block mb-1">Water Intake (Liters)</label>
+                    <input type="number" step="0.5" id="inputUpdateWater" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3 py-2 text-xs text-white focus:border-brandYellow focus:outline-none" value="2.5">
+                </div>
+                <div>
+                    <label class="text-[11px] text-gray-400 block mb-1">Workout Notes / Steps</label>
+                    <input type="text" id="inputUpdateWorkout" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3 py-2 text-xs text-white focus:border-brandYellow focus:outline-none" placeholder="e.g. Leg Day + 8000 steps">
+                </div>
+                <button onclick="saveDailyUpdate()" class="w-full py-3 bg-brandYellow text-black font-bold text-xs rounded-xl hover:bg-brandYellowHover transition shadow-md mt-2">Save Update</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. NOTIFICATIONS & REMINDERS MODAL -->
+    <div id="notificationsModal" class="fixed inset-0 z-50 flex items-center justify-center modal-backdrop hidden">
+        <div class="bg-cardBg border border-cardBorder w-full max-w-sm rounded-2xl p-5 space-y-4">
+            <div class="flex items-center justify-between">
+                <h3 class="font-extrabold text-base text-white">Notifications & Alerts</h3>
+                <button onclick="closeModal('notificationsModal')" class="w-8 h-8 rounded-full bg-darkBg flex items-center justify-center text-gray-400 hover:text-white">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="space-y-3">
+                <div class="p-3 rounded-xl bg-darkBg/60 border border-cardBorder flex items-start gap-3">
+                    <div class="w-8 h-8 rounded-full bg-brandYellow/20 text-brandYellow flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <i class="fa-solid fa-utensils text-xs"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-xs text-white">2-Week Diet Plan Update</h4>
+                        <p class="text-[11px] text-gray-400 mt-0.5">Your bi-weekly revised meal plan is ready for review with Coach Akash.</p>
+                        <span class="text-[9px] text-brandYellow mt-1 block">Today, 10:00 AM</span>
+                    </div>
+                </div>
+                <div class="p-3 rounded-xl bg-darkBg/60 border border-cardBorder flex items-start gap-3">
+                    <div class="w-8 h-8 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <i class="fa-brands fa-whatsapp text-xs"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-xs text-white">Weekly Strategy Call</h4>
+                        <p class="text-[11px] text-gray-400 mt-0.5">Scheduled weekly check-in call with Akash Kumar.</p>
+                        <button onclick="scheduleWhatsAppCall()" class="mt-2 px-3 py-1 bg-green-600 text-white font-bold text-[10px] rounded-lg hover:bg-green-500 transition">Schedule via WhatsApp</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. CLIENT SWITCHER / ADD CLIENT MODAL -->
+    <div id="addClientModal" class="fixed inset-0 z-50 flex items-center justify-center modal-backdrop hidden">
+        <div class="bg-cardBg border border-cardBorder w-full max-w-sm rounded-2xl p-5 space-y-4">
+            <div class="flex items-center justify-between">
+                <h3 class="font-extrabold text-base text-white">Add New Client Profile</h3>
+                <button onclick="closeModal('addClientModal')" class="w-8 h-8 rounded-full bg-darkBg flex items-center justify-center text-gray-400 hover:text-white">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="space-y-3">
+                <div>
+                    <label class="text-[11px] text-gray-400 block mb-1">Client Full Name</label>
+                    <input type="text" id="newClientName" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3 py-2 text-xs text-white focus:border-brandYellow focus:outline-none" placeholder="e.g. Priya Sharma">
+                </div>
+                <div>
+                    <label class="text-[11px] text-gray-400 block mb-1">Email Address</label>
+                    <input type="email" id="newClientEmail" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3 py-2 text-xs text-white focus:border-brandYellow focus:outline-none" placeholder="priya@gmail.com">
+                </div>
+                <div>
+                    <label class="text-[11px] text-gray-400 block mb-1">Goal Program</label>
+                    <select id="newClientGoal" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3 py-2 text-xs text-white focus:border-brandYellow focus:outline-none">
+                        <option value="Fat Loss & Shredding">Fat Loss & Shredding</option>
+                        <option value="Muscle Hypertrophy">Muscle Hypertrophy</option>
+                        <option value="Reversal & Clinical Nutrition">Reversal & Clinical Nutrition</option>
+                    </select>
+                </div>
+                <button onclick="saveNewClient()" class="w-full py-3 bg-brandYellow text-black font-bold text-xs rounded-xl hover:bg-brandYellowHover transition shadow-md mt-2">Create Profile</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. EDIT PROFILE MODAL -->
+    <div id="editProfileModal" class="fixed inset-0 z-50 flex items-center justify-center modal-backdrop hidden">
+        <div class="bg-cardBg border border-cardBorder w-full max-w-sm rounded-2xl p-5 space-y-4">
+            <div class="flex items-center justify-between">
+                <h3 class="font-extrabold text-base text-white">Edit Profile</h3>
+                <button onclick="closeModal('editProfileModal')" class="w-8 h-8 rounded-full bg-darkBg flex items-center justify-center text-gray-400 hover:text-white">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="space-y-3">
+                <div>
+                    <label class="text-[11px] text-gray-400 block mb-1">Full Name</label>
+                    <input type="text" id="editProfileNameInput" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3 py-2 text-xs text-white focus:border-brandYellow focus:outline-none">
+                </div>
+                <div>
+                    <label class="text-[11px] text-gray-400 block mb-1">Email</label>
+                    <input type="email" id="editProfileEmailInput" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3 py-2 text-xs text-white focus:border-brandYellow focus:outline-none">
+                </div>
+                <button onclick="saveProfileEdit()" class="w-full py-3 bg-brandYellow text-black font-bold text-xs rounded-xl hover:bg-brandYellowHover transition shadow-md mt-2">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. MACRO CALCULATOR MODAL -->
+    <div id="macroCalcModal" class="fixed inset-0 z-50 flex items-center justify-center modal-backdrop hidden">
+        <div class="bg-cardBg border border-cardBorder w-full max-w-sm rounded-2xl p-5 space-y-4">
+            <div class="flex items-center justify-between">
+                <h3 class="font-extrabold text-base text-white">Macro Calculator</h3>
+                <button onclick="closeModal('macroCalcModal')" class="w-8 h-8 rounded-full bg-darkBg flex items-center justify-center text-gray-400 hover:text-white">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="space-y-3">
+                <div>
+                    <label class="text-[11px] text-gray-400 block mb-1">Total Daily Calories (Kcal)</label>
+                    <input type="number" id="calcCalories" value="2100" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3 py-2 text-xs text-white focus:border-brandYellow focus:outline-none">
+                </div>
+                <div>
+                    <label class="text-[11px] text-gray-400 block mb-1">Diet Split Type</label>
+                    <select id="calcDietType" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3 py-2 text-xs text-white focus:border-brandYellow focus:outline-none">
+                        <option value="balanced">Balanced (30% P / 40% C / 30% F)</option>
+                        <option value="lowcarb">Low Carb (35% P / 25% C / 40% F)</option>
+                        <option value="highprotein">High Protein (40% P / 35% C / 25% F)</option>
+                    </select>
+                </div>
+                <button onclick="calculateMacros()" class="w-full py-3 bg-brandYellow text-black font-bold text-xs rounded-xl hover:bg-brandYellowHover transition shadow-md mt-2">Apply Targets</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 7. GOAL CALCULATOR MODAL -->
+    <div id="goalCalcModal" class="fixed inset-0 z-50 flex items-center justify-center modal-backdrop hidden">
+        <div class="bg-cardBg border border-cardBorder w-full max-w-sm rounded-2xl p-5 space-y-4">
+            <div class="flex items-center justify-between">
+                <h3 class="font-extrabold text-base text-white">Goal Weight Calculator</h3>
+                <button onclick="closeModal('goalCalcModal')" class="w-8 h-8 rounded-full bg-darkBg flex items-center justify-center text-gray-400 hover:text-white">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="space-y-3">
+                <div>
+                    <label class="text-[11px] text-gray-400 block mb-1">Current Weight (kg)</label>
+                    <input type="number" id="goalCurrWeight" value="74.5" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3 py-2 text-xs text-white focus:border-brandYellow focus:outline-none">
+                </div>
+                <div>
+                    <label class="text-[11px] text-gray-400 block mb-1">Target Weight (kg)</label>
+                    <input type="number" id="goalTargetWeight" value="68.0" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3 py-2 text-xs text-white focus:border-brandYellow focus:outline-none">
+                </div>
+                <div>
+                    <label class="text-[11px] text-gray-400 block mb-1">Weeks to Goal</label>
+                    <input type="number" id="goalWeeks" value="12" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3 py-2 text-xs text-white focus:border-brandYellow focus:outline-none">
+                </div>
+                <button onclick="calculateGoalPlan()" class="w-full py-3 bg-brandYellow text-black font-bold text-xs rounded-xl hover:bg-brandYellowHover transition shadow-md mt-2">Calculate Plan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 8. BMR CALCULATOR MODAL -->
+    <div id="bmrCalcModal" class="fixed inset-0 z-50 flex items-center justify-center modal-backdrop hidden">
+        <div class="bg-cardBg border border-cardBorder w-full max-w-sm rounded-2xl p-5 space-y-4">
+            <div class="flex items-center justify-between">
+                <h3 class="font-extrabold text-base text-white">BMR & TEE Calculator</h3>
+                <button onclick="closeModal('bmrCalcModal')" class="w-8 h-8 rounded-full bg-darkBg flex items-center justify-center text-gray-400 hover:text-white">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="space-y-3">
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-[11px] text-gray-400 block mb-1">Weight (kg)</label>
+                        <input type="number" id="bmrWeight" value="74.5" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3 py-2 text-xs text-white focus:border-brandYellow focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="text-[11px] text-gray-400 block mb-1">Height (cm)</label>
+                        <input type="number" id="bmrHeight" value="175" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3 py-2 text-xs text-white focus:border-brandYellow focus:outline-none">
+                    </div>
+                </div>
+                <div>
+                    <label class="text-[11px] text-gray-400 block mb-1">Age (Years)</label>
+                    <input type="number" id="bmrAge" value="28" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3 py-2 text-xs text-white focus:border-brandYellow focus:outline-none">
+                </div>
+                <div>
+                    <label class="text-[11px] text-gray-400 block mb-1">Activity Level</label>
+                    <select id="bmrActivity" class="w-full bg-darkBg border border-cardBorder rounded-xl px-3 py-2 text-xs text-white focus:border-brandYellow focus:outline-none">
+                        <option value="1.2">Sedentary (Little or no exercise)</option>
+                        <option value="1.375">Lightly Active (1-3 days/week)</option>
+                        <option value="1.55" selected>Moderately Active (3-5 days/week)</option>
+                        <option value="1.725">Very Active (6-7 days/week)</option>
+                    </select>
+                </div>
+                <button onclick="calculateBMR()" class="w-full py-3 bg-brandYellow text-black font-bold text-xs rounded-xl hover:bg-brandYellowHover transition shadow-md mt-2">Calculate TEE</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 9. TESTIMONIAL DETAIL MODAL -->
+    <div id="testimonialModal" class="fixed inset-0 z-50 flex items-center justify-center modal-backdrop hidden">
+        <div class="bg-cardBg border border-cardBorder w-full max-w-sm rounded-2xl p-5 space-y-4">
+            <div class="flex items-center justify-between">
+                <h3 id="testiName" class="font-extrabold text-base text-white">Client Story</h3>
+                <button onclick="closeModal('testimonialModal')" class="w-8 h-8 rounded-full bg-darkBg flex items-center justify-center text-gray-400 hover:text-white">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="space-y-3">
+                <span id="testiTag" class="text-xs px-2.5 py-1 rounded-full bg-brandYellow/20 text-brandYellow font-bold inline-block"></span>
+                <p id="testiDesc" class="text-xs text-gray-300 leading-relaxed"></p>
+                <div class="p-3 rounded-xl bg-darkBg/60 border border-cardBorder text-[11px] text-gray-400 italic">
+                    "Coached under Akash Kumar via CraveFit Elite Nutrition."
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 10. TESTIMONIALS LIST MODAL -->
+    <div id="testimonialsListModal" class="fixed inset-0 z-50 flex items-center justify-center modal-backdrop hidden">
+        <div class="bg-cardBg border border-cardBorder w-full max-w-md rounded-2xl p-5 space-y-4 max-h-[80vh] overflow-y-auto">
+            <div class="flex items-center justify-between">
+                <h3 class="font-extrabold text-base text-white">All Success Stories</h3>
+                <button onclick="closeModal('testimonialsListModal')" class="w-8 h-8 rounded-full bg-darkBg flex items-center justify-center text-gray-400 hover:text-white">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="space-y-3">
+                <div class="p-3 rounded-xl bg-darkBg/60 border border-cardBorder space-y-1">
+                    <div class="flex justify-between items-center"><h4 class="font-bold text-xs text-white">Priya Sharma</h4><span class="text-[10px] text-brandYellow font-bold">-12 kg Fat Loss</span></div>
+                    <p class="text-[11px] text-gray-300">Coach Akash structured my meals and training. The WhatsApp check-ins kept me accountable every single day!</p>
+                </div>
+                <div class="p-3 rounded-xl bg-darkBg/60 border border-cardBorder space-y-1">
+                    <div class="flex justify-between items-center"><h4 class="font-bold text-xs text-white">Rahul Verma</h4><span class="text-[10px] text-brandYellow font-bold">+6 kg Muscle Gain</span></div>
+                    <p class="text-[11px] text-gray-300">The macro tracker and customized diet plans made bulking so clean and structured. Best coach in Pune!</p>
+                </div>
+                <div class="p-3 rounded-xl bg-darkBg/60 border border-cardBorder space-y-1">
+                    <div class="flex justify-between items-center"><h4 class="font-bold text-xs text-white">Kabir Mehta</h4><span class="text-[10px] text-brandYellow font-bold">Reversed Diabetes</span></div>
+                    <p class="text-[11px] text-gray-300">Lost 14kgs and brought my HbA1c down from 8.2 to 5.6. Akash understands clinical nutrition deeply.</p>
+                </div>
+                <div class="p-3 rounded-xl bg-darkBg/60 border border-cardBorder space-y-1">
+                    <div class="flex justify-between items-center"><h4 class="font-bold text-xs text-white">Ananya Iyer</h4><span class="text-[10px] text-brandYellow font-bold">PCOS Management</span></div>
+                    <p class="text-[11px] text-gray-300">Sustainable fat loss without starving. The 2-week diet updates kept my metabolism high all through!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 11. CLOUD KITCHEN MODAL -->
+    <div id="cloudKitchenModal" class="fixed inset-0 z-50 flex items-center justify-center modal-backdrop hidden">
+        <div class="bg-cardBg border border-cardBorder w-full max-w-sm rounded-2xl p-5 space-y-4">
+            <div class="flex items-center justify-between">
+                <h3 class="font-extrabold text-base text-white">MAAti Cloud Kitchen Meals</h3>
+                <button onclick="closeModal('cloudKitchenModal')" class="w-8 h-8 rounded-full bg-darkBg flex items-center justify-center text-gray-400 hover:text-white">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="space-y-3">
+                <p class="text-xs text-gray-300">High-protein, macro-counted clean meals cooked by professional chefs in Pune.</p>
+                <div class="p-3 rounded-xl bg-darkBg/60 border border-cardBorder space-y-2">
+                    <div class="flex justify-between text-xs"><span class="font-bold text-white">Balanced Chicken Biryani (45g P)</span><span class="text-brandYellow">₹349</span></div>
+                    <div class="flex justify-between text-xs"><span class="font-bold text-white">Paneer High-Protein Meal Box</span><span class="text-brandYellow">₹299</span></div>
+                    <div class="flex justify-between text-xs"><span class="font-bold text-white">Grilled Fish & Quinoa Bowl</span><span class="text-brandYellow">₹399</span></div>
+                </div>
+                <a href="https://wa.me/919822000000?text=Hi%20CraveFit,%20I%20would%20like%20to%20order%20MAAti%20Cloud%20Kitchen%20meals." target="_blank" class="w-full py-3 bg-brandYellow text-black font-bold text-xs rounded-xl hover:bg-brandYellowHover transition shadow-md flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-sm"></i> Order via WhatsApp
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT APP LOGIC -->
+    <script>
+        // --- APP STATE & DATABASE ---
+        let currentTab = 'home';
+        let currentSlide = 0;
+        let macroChartInstance = null;
+
+        // Food Database (200+ inspired items)
+        const foodDatabase = [
+            { name: "Whey Protein Isolate (1 scoop)", calories: 120, protein: 25, carbs: 2, fats: 1 },
+            { name: "Chicken Breast (100g, cooked)", calories: 165, protein: 31, carbs: 0, fats: 3.6 },
+            { name: "Brown Rice (100g, cooked)", calories: 112, protein: 2.6, carbs: 23, fats: 0.9 },
+            { name: "Whole Eggs (2 eggs)", calories: 140, protein: 12, carbs: 0.8, fats: 10 },
+            { name: "Paneer / Cottage Cheese (100g)", calories: 265, protein: 18, carbs: 6, fats: 20 },
+            { name: "Oats (50g dry)", calories: 190, protein: 6.5, carbs: 34, fats: 3.5 },
+            { name: "Peanut Butter (2 tablespoons)", calories: 190, protein: 8, carbs: 7, fats: 16 },
+            { name: "Banana (1 medium)", calories: 105, protein: 1.3, carbs: 27, fats: 0.3 },
+            { name: "Greek Yogurt (150g)", calories: 100, protein: 15, carbs: 6, fats: 0.4 },
+            { name: "Dal / Lentils (1 bowl cooked)", calories: 140, protein: 9, carbs: 24, fats: 1 }
+        ];
+
+        // Multi-Client Profiles State
+        let clients = [
+            { id: 1, name: "Akash Kumar", email: "akash.cravefit@gmail.com", targetCals: 2100, targetProtein: 150, targetCarbs: 210, targetFats: 65, consumedCals: 0, consumedProtein: 0, consumedCarbs: 0, consumedFats: 0, weight: 74.5, water: 2.5, loggedMeals: [] },
+            { id: 2, name: "Priya Sharma", email: "priya.sharma@gmail.com", targetCals: 1600, targetProtein: 120, targetCarbs: 150, targetFats: 50, consumedCals: 320, consumedProtein: 28, consumedCarbs: 35, consumedFats: 8, weight: 62.0, water: 2.0, loggedMeals: [{name: "Oats & Whey", calories: 320, protein: 28, carbs: 35, fats: 8}] },
+            { id: 3, name: "Rahul Verma", email: "rahul.verma@gmail.com", targetCals: 2600, targetProtein: 180, targetCarbs: 300, targetFats: 75, consumedCals: 650, consumedProtein: 45, consumedCarbs: 70, consumedFats: 15, weight: 78.0, water: 3.0, loggedMeals: [{name: "Chicken & Rice", calories: 650, protein: 45, carbs: 70, fats: 15}] }
+        ];
+        let activeClientId = 1;
+
+        // --- INITIALIZATION ---
+        window.addEventListener('DOMContentLoaded', () => {
+            initMacroChart();
+            renderClientProfiles();
+            updateActiveClientUI();
+            filterFoodDatabase();
+            
+            // Auto hero banner slide timer
+            setInterval(() => {
+                currentSlide = (currentSlide + 1) % 2;
+                setHeroSlide(currentSlide);
+            }, 5000);
+        });
+
+        // --- TAB SWITCHING ---
+        function switchTab(tabId) {
+            currentTab = tabId;
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+            // Update nav icon colors
+            ['home', 'health', 'coach', 'chat', 'profile'].forEach(t => {
+                const btn = document.getElementById(`nav-${t}`);
+                if (btn) {
+                    if (t === tabId) {
+                        btn.classList.remove('text-gray-400');
+                        btn.classList.add('text-brandYellow');
+                    } else {
+                        btn.classList.remove('text-brandYellow');
+                        btn.classList.add('text-gray-400');
+                    }
+                }
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // --- HERO CAROUSEL ---
+        function setHeroSlide(index) {
+            currentSlide = index;
+            const carousel = document.getElementById('heroCarousel');
+            if (carousel) {
+                carousel.style.transform = `translateX(-${index * 100}%)`;
+            }
+            const dot0 = document.getElementById('dot0');
+            const dot1 = document.getElementById('dot1');
+            if (dot0 && dot1) {
+                if (index === 0) {
+                    dot0.className = 'w-2 h-2 rounded-full bg-brandYellow transition';
+                    dot1.className = 'w-2 h-2 rounded-full bg-gray-600 transition';
+                } else {
+                    dot0.className = 'w-2 h-2 rounded-full bg-gray-600 transition';
+                    dot1.className = 'w-2 h-2 rounded-full bg-brandYellow transition';
+                }
+            }
+        }
+
+        // --- MODAL CONTROLS ---
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) modal.classList.remove('hidden');
+        }
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) modal.classList.add('hidden');
+        }
+
+        // --- CLIENT PROFILE MANAGEMENT ---
+        function getActiveClient() {
+            return clients.find(c => c.id === activeClientId) || clients[0];
+        }
+
+        function renderClientProfiles() {
+            const list = document.getElementById('clientProfilesList');
+            if (!list) return;
+            list.innerHTML = '';
+            clients.forEach(client => {
+                const isSelected = client.id === activeClientId;
+                list.innerHTML += `
+                    <div class="flex items-center justify-between p-3 rounded-xl bg-darkBg/60 border ${isSelected ? 'border-brandYellow' : 'border-cardBorder'}">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 rounded-full bg-brandYellow/20 text-brandYellow font-bold flex items-center justify-center text-xs">
+                                ${client.name.split(' ').map(n=>n[0]).join('')}
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-xs text-white">${client.name} ${isSelected ? '<span class="text-[9px] px-1.5 py-0.5 rounded bg-brandYellow text-black font-extrabold ml-1">Active</span>' : ''}</h4>
+                                <span class="text-[10px] text-gray-400">${client.email}</span>
+                            </div>
+                        </div>
+                        ${!isSelected ? `<button onclick="switchActiveClient(${client.id})" class="px-2.5 py-1 rounded-lg bg-cardBorder text-xs text-gray-200 hover:bg-brandYellow hover:text-black transition">Switch</button>` : ''}
+                    </div>
+                `;
+            });
+        }
+
+        function switchActiveClient(clientId) {
+            activeClientId = clientId;
+            renderClientProfiles();
+            updateActiveClientUI();
+            closeModal('addClientModal');
+        }
+
+        function updateActiveClientUI() {
+            const client = getActiveClient();
+            // Header badge
+            const badge = document.getElementById('activeClientBadge');
+            if (badge) badge.innerText = client.name;
+
+            // Profile Tab Display
+            const nameDisp = document.getElementById('profileNameDisplay');
+            const emailDisp = document.getElementById('profileEmailDisplay');
+            const avatarInit = document.getElementById('profileAvatarInitials');
+            if (nameDisp) nameDisp.innerText = client.name;
+            if (emailDisp) emailDisp.innerText = client.email;
+            if (avatarInit) avatarInit.innerText = client.name.split(' ').map(n=>n[0]).join('');
+
+            // Edit Profile Inputs
+            const editName = document.getElementById('editProfileNameInput');
+            const editEmail = document.getElementById('editProfileEmailInput');
+            if (editName) editName.value = client.name;
+            if (editEmail) editEmail.value = client.email;
+
+            // Update Health Metrics & Macros UI
+            updateHealthMetricsUI();
+        }
+
+        function saveNewClient() {
+            const name = document.getElementById('newClientName').value.trim();
+            const email = document.getElementById('newClientEmail').value.trim();
+            if (!name) { alert('Please enter client name'); return; }
+            const newClient = {
+                id: clients.length + 1,
+                name: name,
+                email: email || `${name.toLowerCase().replace(/\s+/g,'')}@gmail.com`,
+                targetCals: 2000, targetProtein: 140, targetCarbs: 200, targetFats: 60,
+                consumedCals: 0, consumedProtein: 0, consumedCarbs: 0, consumedFats: 0,
+                weight: 70.0, water: 2.0, loggedMeals: []
+            };
+            clients.push(newClient);
+            switchActiveClient(newClient.id);
+            closeModal('addClientModal');
+            document.getElementById('newClientName').value = '';
+            document.getElementById('newClientEmail').value = '';
+        }
+
+        function saveProfileEdit() {
+            const client = getActiveClient();
+            const name = document.getElementById('editProfileNameInput').value.trim();
+            const email = document.getElementById('editProfileEmailInput').value.trim();
+            if (name) client.name = name;
+            if (email) client.email = email;
+            updateActiveClientUI();
+            renderClientProfiles();
+            closeModal('editProfileModal');
+            alert('Profile updated successfully!');
+        }
+
+        // --- FOOD LOGGING & MACROS CHART ---
+        function initMacroChart() {
+            const ctx = document.getElementById('macroChart');
+            if (!ctx) return;
+            macroChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Protein', 'Carbs', 'Fats'],
+                    datasets: [{
+                        data: [0, 0, 100],
+                        backgroundColor: ['#ef4444', '#22c55e', '#FFD700'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    cutout: '75%',
+                    plugins: { legend: { display: false }, tooltip: { enabled: false } },
+                    maintainAspectRatio: false
+                }
+            });
+        }
+
+        function filterFoodDatabase() {
+            const query = (document.getElementById('foodSearchInput')?.value || '').toLowerCase();
+            const resultsContainer = document.getElementById('foodSearchResults');
+            if (!resultsContainer) return;
+
+            const filtered = foodDatabase.filter(f => f.name.toLowerCase().includes(query));
+            resultsContainer.innerHTML = '';
+
+            if (filtered.length === 0) {
+                resultsContainer.innerHTML = '<div class="text-center py-4 text-gray-500 text-xs">No food items found.</div>';
+                return;
+            }
+
+            filtered.forEach(food => {
+                resultsContainer.innerHTML += `
+                    <div class="flex items-center justify-between p-3 rounded-xl bg-darkBg border border-cardBorder hover:border-brandYellow transition">
+                        <div>
+                            <h4 class="font-bold text-xs text-white">${food.name}</h4>
+                            <span class="text-[10px] text-gray-400">${food.calories} kcal | P: ${food.protein}g | C: ${food.carbs}g | F: ${food.fats}g</span>
+                        </div>
+                        <button onclick="logFoodItem('${food.name}', ${food.calories}, ${food.protein}, ${food.carbs}, ${food.fats})" class="px-3 py-1.5 rounded-lg bg-brandYellow text-black font-bold text-xs hover:bg-brandYellowHover transition">
+                            + Add
+                        </button>
+                    </div>
+                `;
+            });
+        }
+
+        function logFoodItem(name, cals, protein, carbs, fats) {
+            const client = getActiveClient();
+            client.consumedCals += cals;
+            client.consumedProtein += protein;
+            client.consumedCarbs += carbs;
+            client.consumedFats += fats;
+            client.loggedMeals.push({ name, calories: cals, protein, carbs, fats });
+
+            updateHealthMetricsUI();
+            closeModal('foodSearchModal');
+        }
+
+        function updateHealthMetricsUI() {
+            const client = getActiveClient();
+            
+            // Calorie & macro texts
+            document.getElementById('consumedCalories').innerText = Math.round(client.consumedCals);
+            document.getElementById('targetCalories').innerText = client.targetCals;
+            document.getElementById('macroRemaining').innerText = Math.max(0, client.targetCals - Math.round(client.consumedCals));
+            
+            document.getElementById('consumedProtein').innerText = Math.round(client.consumedProtein);
+            document.getElementById('targetProtein').innerText = client.targetProtein;
+            document.getElementById('consumedCarbs').innerText = Math.round(client.consumedCarbs);
+            document.getElementById('targetCarbs').innerText = client.targetCarbs;
+            document.getElementById('consumedFats').innerText = Math.round(client.consumedFats);
+            document.getElementById('targetFats').innerText = client.targetFats;
+
+            // Summary widget
+            document.getElementById('summaryCalories').innerText = `${Math.round(client.consumedCals)} / ${client.targetCals}`;
+            document.getElementById('summaryWeight').innerText = `${client.weight} kg`;
+            document.getElementById('summaryWater').innerText = `${client.water} L`;
+
+            // Measurements widget
+            document.getElementById('metricWeight').innerText = `${client.weight} kg`;
+            document.getElementById('metricWater').innerText = `${client.water} Liters`;
+
+            // Logged meals list
+            const mealsList = document.getElementById('loggedMealsList');
+            const mealCount = document.getElementById('mealCountText');
+            if (mealsList) {
+                if (client.loggedMeals.length === 0) {
+                    mealsList.innerHTML = '<div class="text-center py-6 text-gray-500 text-xs italic">No food logged yet. Click "Add Food" above.</div>';
+                    if (mealCount) mealCount.innerText = '0 items logged';
+                } else {
+                    mealsList.innerHTML = '';
+                    client.loggedMeals.forEach((m, idx) => {
+                        mealsList.innerHTML += `
+                            <div class="flex items-center justify-between p-2.5 rounded-xl bg-darkBg/60 border border-cardBorder text-xs">
+                                <div>
+                                    <span class="font-bold text-white">${m.name}</span>
+                                    <span class="text-[10px] text-gray-400 block">${m.calories} kcal | P:${m.protein}g C:${m.carbs}g F:${m.fats}g</span>
+                                </div>
+                                <button onclick="removeMeal(${idx})" class="text-gray-500 hover:text-red-400 p-1"><i class="fa-solid fa-trash text-xs"></i></button>
+                            </div>
+                        `;
+                    });
+                    if (mealCount) mealCount.innerText = `${client.loggedMeals.length} items logged`;
+                }
+            }
+
+            // Update macro chart
+            if (macroChartInstance) {
+                const pCals = client.consumedProtein * 4;
+                const cCals = client.consumedCarbs * 4;
+                const fCals = client.consumedFats * 9;
+                const total = pCals + cCals + fCals;
+                if (total > 0) {
+                    macroChartInstance.data.datasets[0].data = [pCals, cCals, fCals];
+                } else {
+                    macroChartInstance.data.datasets[0].data = [0, 0, 100];
+                }
+                macroChartInstance.update();
+            }
+        }
+
+        function removeMeal(index) {
+            const client = getActiveClient();
+            const removed = client.loggedMeals.splice(index, 1)[0];
+            if (removed) {
+                client.consumedCals -= removed.calories;
+                client.consumedProtein -= removed.protein;
+                client.consumedCarbs -= removed.carbs;
+                client.consumedFats -= removed.fats;
+            }
+            updateHealthMetricsUI();
+        }
+
+        // --- DAILY UPDATE MODAL SAVING ---
+        function saveDailyUpdate() {
+            const client = getActiveClient();
+            const w = parseFloat(document.getElementById('inputUpdateWeight').value);
+            const wt = parseFloat(document.getElementById('inputUpdateWater').value);
+            if (!isNaN(w)) client.weight = w;
+            if (!isNaN(wt)) client.water = wt;
+
+            updateHealthMetricsUI();
+            closeModal('dailyUpdateModal');
+            alert('Daily progress updated successfully!');
+        }
+
+        // --- CALCULATORS ---
+        function calculateMacros() {
+            const client = getActiveClient();
+            const cals = parseInt(document.getElementById('calcCalories').value) || 2100;
+            const type = document.getElementById('calcDietType').value;
+            client.targetCals = cals;
+
+            if (type === 'balanced') {
+                client.targetProtein = Math.round((cals * 0.30) / 4);
+                client.targetCarbs = Math.round((cals * 0.40) / 4);
+                client.targetFats = Math.round((cals * 0.30) / 9);
+            } else if (type === 'lowcarb') {
+                client.targetProtein = Math.round((cals * 0.35) / 4);
+                client.targetCarbs = Math.round((cals * 0.25) / 4);
+                client.targetFats = Math.round((cals * 0.40) / 9);
+            } else if (type === 'highprotein') {
+                client.targetProtein = Math.round((cals * 0.40) / 4);
+                client.targetCarbs = Math.round((cals * 0.35) / 4);
+                client.targetFats = Math.round((cals * 0.25) / 9);
+            }
+
+            updateHealthMetricsUI();
+            closeModal('macroCalcModal');
+            alert('New macro targets applied successfully!');
+        }
+
+        function calculateGoalPlan() {
+            const curr = parseFloat(document.getElementById('goalCurrWeight').value);
+            const target = parseFloat(document.getElementById('goalTargetWeight').value);
+            const weeks = parseInt(document.getElementById('goalWeeks').value);
+            const diff = curr - target;
+            const weeklyChange = (diff / weeks).toFixed(2);
+            alert(`Goal Plan Calculated:\nTo reach your target in ${weeks} weeks, you need a steady weekly change of ${weeklyChange} kg/week. Your coach Akash has recorded this goal.`);
+            closeModal('goalCalcModal');
+        }
+
+        function calculateBMR() {
+            const w = parseFloat(document.getElementById('bmrWeight').value);
+            const h = parseFloat(document.getElementById('bmrHeight').value);
+            const a = parseInt(document.getElementById('bmrAge').value);
+            const act = parseFloat(document.getElementById('bmrActivity').value);
+
+            // Mifflin-St Jeor Equation for Men
+            const bmr = (10 * w) + (6.25 * h) - (5 * a) + 5;
+            const tee = Math.round(bmr * act);
+            alert(`BMR Result: ${Math.round(bmr)} kcal/day\nTotal Daily Energy Expenditure (TEE): ${tee} kcal/day`);
+            closeModal('bmrCalcModal');
+        }
+
+        // --- TESTIMONIAL MODALS ---
+        function openTestimonialDetail(name, tag, desc) {
+            document.getElementById('testiName').innerText = name;
+            document.getElementById('testiTag').innerText = tag;
+            document.getElementById('testiDesc').innerText = desc;
+            openModal('testimonialModal');
+        }
+        function openTestimonialsModal() {
+            openModal('testimonialsListModal');
+        }
+        function openNotificationsModal() {
+            openModal('notificationsModal');
+        }
+
+        // --- WHATSAPP CHECKOUT & SCHEDULER ---
+        function checkoutPlan(planName, price) {
+            const client = getActiveClient();
+            const msg = encodeURIComponent(`Hi Coach Akash,\n\nI want to enroll in the "${planName}" (₹${price}) for my profile (${client.name}). Please share payment details.`);
+            window.open(`https://wa.me/919822000000?text=${msg}`, '_blank');
+        }
+
+        function scheduleWhatsAppCall() {
+            const client = getActiveClient();
+            const msg = encodeURIComponent(`Hi Coach Akash,\n\nI would like to schedule my weekly check-in strategy call for my profile (${client.name}).`);
+            window.open(`https://wa.me/919822000000?text=${msg}`, '_blank');
+            closeModal('notificationsModal');
+        }
+
+        // --- LIVE CHAT SIMULATOR ---
+        function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const container = document.getElementById('chatMessagesContainer');
+            if (!input || !input.value.trim()) return;
+
+            const text = input.value.trim();
+            input.value = '';
+
+            // Append user message
+            container.innerHTML += `
+                <div class="flex flex-col space-y-1 items-end">
+                    <div class="self-end bg-brandYellow text-black font-medium rounded-2xl rounded-tr-none p-3 max-w-[85%] text-xs">
+                        ${text}
+                    </div>
+                    <span class="text-[9px] text-gray-500 mr-1">Just now</span>
+                </div>
+            `;
+            container.scrollTop = container.scrollHeight;
+
+            // Simulated coach response after 1 second
+            setTimeout(() => {
+                container.innerHTML += `
+                    <div class="flex flex-col space-y-1">
+                        <div class="self-start bg-neutral-800 border border-cardBorder rounded-2xl rounded-tl-none p-3 max-w-[85%] text-xs text-gray-200">
+                            Thanks for your message! I've noted your update regarding "${text}". Keep staying consistent with your macros and hydration. Let's crush this week! 💪
+                        </div>
+                        <span class="text-[9px] text-gray-500 ml-1">Just now</span>
+                    </div>
+                `;
+                container.scrollTop = container.scrollHeight;
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
