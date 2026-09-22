@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CraveFit | Elite Client Nutrition & Transformation Engine</title>
+    <style>
+        :root {
+            --primary-yellow: #f59e0b;
+            --primary-hover: #d97706;
+            --bg-dark: #09090b;
+            --card-dark: #121216;
+            --border-color: #27272a;
+            --text-main: #f4f4f5;
+            --text-muted: #a1a1aa;
+            --accent-green: #10b981;
+            --accent-blue: #0ea5e9;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            padding: 1rem;
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding-bottom: 4rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem 1rem;
+            background: linear-gradient(180deg, #18181b 0%, var(--card-dark) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.7);
+        }
+
+        h1 {
+            color: var(--primary-yellow);
+            font-size: 2.5rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+            margin-bottom: 0.2rem;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .card {
+            background-color: var(--card-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 1.8rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        h2 {
+            font-size: 1.3rem;
+            margin-bottom: 1.2rem;
+            color: var(--primary-yellow);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.2rem;
+        }
+
+        .form-group {
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group.full {
+            grid-column: span 2;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.4rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-dark);
+            color: var(--text-main);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-yellow);
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+        }
+
+        .btn {
+            background-color: var(--primary-yellow);
+            color: var(--bg-dark);
+            border: none;
+            width: 100%;
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            margin-top: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+            color: #ffffff;
+        }
+
+        .btn:active {
+            transform: scale(0.99);
+        }
+
+        .btn-whatsapp {
+            background-color: var(--accent-green);
+            color: white;
+            margin-top: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            text-decoration: none;
+            font-weight: 800;
+            padding: 1rem;
+            border-radius: 8px;
+            text-transform: uppercase;
+            font-size: 1rem;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            transition: background 0.2s;
+        }
+
+        .btn-whatsapp:hover {
+            background-color: #059669;
+        }
+
+        .results-container {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            display: none;
+        }
+
+        .metric-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.8rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .mini-stat-card {
+            background: #18181b;
+            border: 1px solid var(--border-color);
+            padding: 0.9rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .mini-stat-card .label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .mini-stat-card .value {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--primary-yellow);
+            margin-top: 0.2rem;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+            font-size: 1rem;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 0.6rem;
+        }
+
+        .result-row:last-of-type {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .result-val {
+            font-weight: 800;
+            color: var(--primary-yellow);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            background: #27272a;
+            color: var(--accent-blue);
+            margin-left: 0.5rem;
+        }
+
+        .section-divider {
+            margin: 1.5rem 0 1rem 0;
+            font-size: 0.9rem;
+            color: var(--primary-yellow);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-left: 3px solid var(--primary-yellow);
+            padding-left: 0.5rem;
+        }
+
+        @media (max-width: 600px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .form-group.full {
+                grid-column: span 1;
+            }
+            .metric-cards-grid {
+                grid-template-columns: 1fr;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>CRAVEFIT</h1>
+            <div class="subtitle">Professional Nutrition Consulting & Transformation Suite</div>
+        </header>
+
+        <!-- SECTION 1: CLIENT IDENTIFICATION -->
+        <div class="card">
+            <h2>1. Client Profile & Communication</h2>
+            <div class="form-grid">
+                <div class="form-group full">
+                    <label for="clientName">Client Full Name</label>
+                    <input type="text" id="clientName" placeholder="e.g. Vikram Malhotra">
+                </div>
+                <div class="form-group">
+                    <label for="clientPhone">WhatsApp Number (with Country Code)</label>
+                    <input type="text" id="clientPhone" placeholder="+919876543210">
+                </div>
+                <div class="form-group">
+                    <label for="consultDate">Consultation Date</label>
+                    <input type="date" id="consultDate">
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: BIOMETRICS & PHYSIQUE METRICS -->
+        <div class="card">
+            <h2>2. Comprehensive Anthropometric Data</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="clientAge">Age (Years)</label>
+                    <input type="number" id="clientAge" placeholder="28">
+                </div>
+                <div class="form-group">
+                    <label for="clientGender">Biological Gender</label>
+                    <select id="clientGender">
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="weight">Current Weight (kg)</label>
+                    <input type="number" id="weight" step="0.1" placeholder="78.5">
+                </div>
+                <div class="form-group">
+                    <label for="height">Height (cm)</label>
+                    <input type="number" id="height" placeholder="175">
+                </div>
+                <div class="form-group">
+                    <label for="bodyFat">Estimated Body Fat % (Optional)</label>
+                    <input type="number" id="bodyFat" step="0.1" placeholder="18.5">
+                </div>
+                <div class="form-group">
+                    <label for="activityLevel">Daily Activity Factor</label>
+                    <select id="activityLevel">
+                        <option value="1.2">Sedentary (Desk job, little exercise)</option>
+                        <option value="1.375">Lightly Active (1-3 days/week workout)</option>
+                        <option value="1.55" selected>Moderately Active (3-5 days/week workout)</option>
+                        <option value="1.725">Very Active (6-7 intense days/week)</option>
+                        <option value="1.9">Athlete / Heavy Physical Job</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 3: OBJECTIVES & MACRO PREFERENCES -->
+        <div class="card">
+            <h2>3. Goal Directives & Strategy</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="goalType">Primary Objective</label>
+                    <select id="goalType">
+                        <option value="aggressive_cut">Aggressive Fat Loss (-25% Deficit)</option>
+                        <option value="cut">Standard Fat Loss (-15% Deficit)</option>
+                        <option value="maintenance" selected>Weight Maintenance / Recomp</option>
+                        <option value="lean_bulk">Controlled Muscle Mass (+10% Surplus)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="proteinStrategy">Protein Strategy (per kg)</label>
+                    <select id="proteinStrategy">
+                        <option value="2.0">Standard Fitness (2.0g / kg)</option>
+                        <option value="2.2" selected>High Performance (2.2g / kg)</option>
+                        <option value="2.5">Aggressive Muscle Retention (2.5g / kg)</option>
+                    </select>
+                </div>
+                <div class="form-group full">
+                    <label for="dietaryPreference">Dietary Approach / Notes</label>
+                    <select id="dietaryPreference">
+                        <option value="Balanced Flexitarian">Balanced Flexitarian / Flexible Dieting</option>
+                        <option value="High Protein Vegetarian">High Protein Vegetarian (Paneer, Dairy, Lentils)</option>
+                        <option value="Clean Whole Foods">Clean Whole Foods Bodybuilding</option>
+                        <option value="Low Carb Keto Focus">Low Carb / Cyclical Carb Focus</option>
+                    </select>
+                </div>
+            </div>
+
+            <button class="btn" onclick="executeFullEngineCalculation()">Run Elite Diagnostic & Build Plan</button>
+
+            <!-- COMPREHENSIVE RESULTS DISPLAY PANEL -->
+            <div id="comprehensiveResults" class="results-container">
+                
+                <div class="section-divider">Diagnostic Biometrics</div>
+                <div class="metric-cards-grid">
+                    <div class="mini-stat-card">
+                        <div class="label">BMI Index</div>
+                        <div class="value" id="resBmiVal">-</div>
+                    </div>
+                    <div class="mini-stat-card">
+                        <div class="label">Basal Met. Rate</div>
+                        <div class="value" id="resBmrVal">-</div>
+                    </div>
+                    <div class="mini-stat-card">
+                        <div class="label">Total Daily Energy</div>
+                        <div class="value" id="resTdeeVal">-</div>
+                    </div>
+                </div>
+
+                <div class="section-divider">Target Macro Prescription</div>
+                <div class="result-row">
+                    <span>Prescribed Target Calories:</span>
+                    <span id="resTargetCal" class="result-val">-</span>
+                </div>
+                <div class="result-row">
+                    <span>Daily Protein Target:</span>
+                    <span id="resProteinVal" class="result-val">-</span>
+                </div>
+                <div class="result-row">
+                    <span>Carbohydrate Allocation:</span>
+                    <span id="resCarbsVal" class="result-val">-</span>
+                </div>
+                <div class="result-row">
+                    <span>Dietary Fat Allocation:</span>
+                    <span id="resFatsVal" class="result-val">-</span>
+                </div>
+                <div class="result-row">
+                    <span>Hydration Benchmark:</span>
+                    <span id="resWaterVal" class="result-val">-</span>
+                </div>
+
+                <div class="section-divider">Customized Protocol Directives</div>
+                <div class="form-group full" style="margin-top: 1rem;">
+                    <label for="coachRemarks">Personalized Coach Remarks & Guidelines</label>
+                    <textarea id="coachRemarks" rows="4">1. Distribute protein intake across 4 structured meals to optimize muscle protein synthesis.
+2. Ensure minimum 7-8 hours of quality sleep for recovery and hormonal regulation.
+3. Track daily morning weight on an empty stomach under consistent conditions.</textarea>
+                </div>
+
+                <!-- WHATSAPP EXPORT TRIGGER -->
+                <a id="whatsappPrescriptionLink" href="#" target="_blank" class="btn-whatsapp">
+                    <span>Send Formatted PDF / Diet Plan via WhatsApp</span>
+                </a>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Set default date to today
+        document.getElementById('consultDate').valueAsDate = new Date();
+
+        function executeFullEngineCalculation() {
+            // Retrieve Form Fields
+            const name = document.getElementById('clientName').value.trim() || 'Valued Client';
+            const phone = document.getElementById('clientPhone').value.trim();
+            const age = parseInt(document.getElementById('clientAge').value);
+            const gender = document.getElementById('clientGender').value;
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value);
+            const bodyFat = parseFloat(document.getElementById('bodyFat').value);
+            const activity = parseFloat(document.getElementById('activityLevel').value);
+            const goal = document.getElementById('goalType').value;
+            const proteinMultiplier = parseFloat(document.getElementById('proteinStrategy').value);
+            const dietStyle = document.getElementById('dietaryPreference').value;
+            const remarks = document.getElementById('coachRemarks').value;
+
+            if (!weight || !height || !age) {
+                alert('Please ensure core biometric fields (Weight, Height, and Age) are completely filled out.');
+                return;
+            }
+
+            // 1. BMI Calculation
+            const heightM = height / 100;
+            const bmi = (weight / (heightM * heightM)).toFixed(1);
+            let bmiCategory = "Normal Weight";
+            if (bmi < 18.5) bmiCategory = "Underweight";
+            else if (bmi >= 25 && bmi < 30) bmiCategory = "Overweight";
+            else if (bmi >= 30) bmiCategory = "Obese / High Risk";
+
+            // 2. BMR Calculation (Mifflin-St Jeor Equation)
+            let bmr = (10 * weight) + (6.25 * height) - (5 * age);
+            bmr = (gender === 'male') ? bmr + 5 : bmr - 161;
+            bmr = Math.round(bmr);
+
+            // 3. TDEE & Goal Adjustment
+            let tdee = Math.round(bmr * activity);
+            let targetCalories = tdee;
+
+            if (goal === 'aggressive_cut') targetCalories = Math.round(tdee * 0.75);
+            else if (goal === 'cut') targetCalories = Math.round(tdee * 0.85);
+            else if (goal === 'lean_bulk') targetCalories = Math.round(tdee * 1.10);
+
+            // 4. Macro Calculation
+            const protein = Math.round(weight * proteinMultiplier);
+            const fats = Math.round((targetCalories * 0.28) / 9); // ~28% energy from clean fats
+            const carbs = Math.round((targetCalories - (protein * 4) - (fats * 9)) / 4);
+            const waterIntake = (weight * 0.038).toFixed(1) + ' Liters / Day';
+
+            // Populate UI Elements
+            document.getElementById('resBmiVal').innerHTML = `${bmi} <span class="badge">${bmiCategory}</span>`;
+            document.getElementById('resBmrVal').innerText = bmr + ' kcal';
+            document.getElementById('resTdeeVal').innerText = tdee + ' kcal';
+            document.getElementById('resTargetCal').innerText = targetCalories + ' kcal';
+            document.getElementById('resProteinVal').innerText = protein + 'g';
+            document.getElementById('resCarbsVal').innerText = carbs + 'g';
+            document.getElementById('resFatsVal').innerText = fats + 'g';
+            document.getElementById('resWaterVal').innerText = waterIntake;
+
+            // Reveal Results Panel
+            document.getElementById('comprehensiveResults').style.display = 'block';
+
+            // Construct Formatted WhatsApp Message Payload
+            const whatsappText = `*CRAVEFIT NUTRITION & TRANSCRIPTION PROTOCOL*%0A%0A` +
+                `Hello *${encodeURIComponent(name)}*, here is your customized professional nutrition roadmap:%0A%0A` +
+                `*👤 CLIENT PROFILE:*%0A` +
+                `- Objective: ${goal.toUpperCase().replace('_', ' ')}%0A` +
+                `- Style: ${encodeURIComponent(dietStyle)}%0A%0A` +
+                `*📊 ANTHROPOMETRIC METRICS:*%0A` +
+                `- BMI Score: ${bmi} (${encodeURIComponent(bmiCategory)})%0A` +
+                `- Basal Metabolic Rate (BMR): ${bmr} kcal%0A` +
+                `- Maintenance Energy (TDEE): ${tdee} kcal%0A%0A` +
+                `*🎯 PRESCRIBED DAILY TARGETS:*%0A` +
+                `- Target Calories: *${targetCalories} kcal*%0A` +
+                `- Protein Target: *${protein}g*%0A` +
+                `- Carbohydrates: *${carbs}g*%0A` +
+                `- Dietary Fats: *${fats}g*%0A` +
+                `- Water Intake: *${waterIntake}%0A%0A` +
+                `*📝 COACH DIRECTIVES & NOTES:*%0A` +
+                `${encodeURIComponent(remarks)}%0A%0A` +
+                `_Powered by CraveFit Elite System_`;
+
+            const cleanPhone = phone.replace(/[^0-9]/g, '');
+            const waEndpoint = cleanPhone ? `https://wa.me/${cleanPhone}?text=${whatsappText}` : `https://wa.me/?text=${whatsappText}`;
+            document.getElementById('whatsappPrescriptionLink').href = waEndpoint;
+        }
+    </script>
+</body>
+</html>
