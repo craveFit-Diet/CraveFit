@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CraveFit - Fitness & Nutrition Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body {
+      background-color: #08090C;
+      color: #E2E8F0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    .accent-yellow { color: #FACC15; }
+    .bg-accent-yellow { background-color: #FACC15; }
+    .border-accent-yellow { border-color: #FACC15; }
+    .card-bg { background-color: #181B24; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between pb-24">
+
+  <!-- Splash Screen -->
+  <div id="splashScreen" class="fixed inset-0 bg-black z-50 flex flex-col items-center justify-center transition-opacity duration-700">
+    <div class="text-center">
+      <h1 class="text-5xl font-extrabold tracking-widest text-yellow-400 mb-2 animate-pulse">CRAVEFIT</h1>
+      <p class="text-xs uppercase tracking-widest text-gray-400">Transform Your Life • Live Stronger</p>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="card-bg border-b border-gray-800 p-4 sticky top-0 z-40 flex items-center justify-between">
+    <div class="flex items-center space-x-2">
+      <span class="text-2xl font-extrabold text-yellow-400">CRAVEFIT</span>
+    </div>
+    <div class="flex items-center space-x-3">
+      <button onclick="toggleSyncModal()" class="text-xs bg-gray-800 text-yellow-400 px-3 py-1.5 rounded-full border border-yellow-400/30 flex items-center space-x-1">
+        <span class="w-2 h-2 rounded-full bg-green-500 animate-ping"></span>
+        <span>Sync Key</span>
+      </button>
+      <button onclick="switchTab('admin')" class="text-xs bg-yellow-400 text-black px-3 py-1.5 rounded-full font-bold">Admin Portal</button>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="p-4 max-w-xl mx-auto w-full flex-grow">
+
+    <!-- TAB 1: Assessment / Free Diet -->
+    <section id="tab-assessment" class="tab-content space-y-6">
+      <div class="text-center my-4">
+        <h2 class="text-2xl font-bold text-yellow-400">Get Your Personalized Home-Made Diet Plan</h2>
+        <p class="text-sm text-gray-400 mt-1">Complete assessment & get instant WhatsApp PDF delivery</p>
+      </div>
+
+      <form id="assessmentForm" onsubmit="handleAssessment(event)" class="card-bg p-5 rounded-2xl border border-gray-800 space-y-4">
+        <div>
+          <label class="block text-xs font-semibold uppercase text-gray-400 mb-1">Full Name</label>
+          <input type="text" id="userName" required class="w-full bg-gray-900 border border-gray-700 rounded-lg p-3 text-sm focus:border-yellow-400 outline-none" placeholder="Enter your name">
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold uppercase text-gray-400 mb-1">Age</label>
+            <input type="number" id="userAge" required class="w-full bg-gray-900 border border-gray-700 rounded-lg p-3 text-sm focus:border-yellow-400 outline-none" placeholder="28">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold uppercase text-gray-400 mb-1">Weight (kg)</label>
+            <input type="number" id="userWeight" required class="w-full bg-gray-900 border border-gray-700 rounded-lg p-3 text-sm focus:border-yellow-400 outline-none" placeholder="70">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold uppercase text-gray-400 mb-1">Diet Preference</label>
+          <select id="userDiet" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-3 text-sm focus:border-yellow-400 outline-none">
+            <option value="Vegetarian">Vegetarian</option>
+            <option value="Non-Vegetarian">Non-Vegetarian</option>
+            <option value="Vegan">Vegan</option>
+            <option value="Jain">Jain</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold uppercase text-gray-400 mb-1">WhatsApp Mobile Number</label>
+          <input type="tel" id="userPhone" required class="w-full bg-gray-900 border border-gray-700 rounded-lg p-3 text-sm focus:border-yellow-400 outline-none" placeholder="+919876543210">
+        </div>
+
+        <button type="submit" class="w-full bg-yellow-400 text-black font-bold py-3.5 rounded-xl shadow-lg hover:bg-yellow-300 transition-colors">
+          Generate & Send Diet Plan on WhatsApp
+        </button>
+      </form>
+    </section>
+
+    <!-- TAB 2: Food & Macro Tracker -->
+    <section id="tab-tracker" class="tab-content hidden space-y-6">
+      <div class="card-bg p-4 rounded-2xl border border-gray-800">
+        <div class="flex justify-between items-center mb-2">
+          <span class="text-sm font-bold text-gray-300">Daily Energy Budget</span>
+          <span class="text-xs text-yellow-400">1,540 / 1,600 kcal</span>
+        </div>
+        <div class="w-full bg-gray-800 h-3 rounded-full overflow-hidden">
+          <div class="bg-yellow-400 h-full" style="width: 80%;"></div>
+        </div>
+        <div class="grid grid-cols-3 gap-2 mt-4 text-center">
+          <div class="bg-gray-900 p-2 rounded-lg">
+            <div class="text-xs text-gray-400">Carbs</div>
+            <div class="text-sm font-bold text-teal-400">100g / 200g</div>
+          </div>
+          <div class="bg-gray-900 p-2 rounded-lg">
+            <div class="text-xs text-gray-400">Fat</div>
+            <div class="text-sm font-bold text-purple-400">51g / 44g</div>
+          </div>
+          <div class="bg-gray-900 p-2 rounded-lg">
+            <div class="text-xs text-gray-400">Protein</div>
+            <div class="text-sm font-bold text-yellow-400">160g / 100g</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-bg p-4 rounded-2xl border border-gray-800">
+        <h3 class="text-lg font-bold text-yellow-400 mb-3">Logged Meals</h3>
+        <div class="space-y-3">
+          <div class="p-3 bg-gray-900 rounded-xl flex justify-between items-center">
+            <div>
+              <div class="font-semibold text-sm">Breakfast - 394 cal</div>
+              <div class="text-xs text-gray-400">Egg white, Whole Egg, Olive Oil</div>
+            </div>
+            <button class="text-xs bg-gray-800 text-yellow-400 px-3 py-1.5 rounded-lg">+ Log</button>
+          </div>
+          <div class="p-3 bg-gray-900 rounded-xl flex justify-between items-center">
+            <div>
+              <div class="font-semibold text-sm">Lunch - 805 cal</div>
+              <div class="text-xs text-gray-400">White Rice, Chicken Breast, Cucumber</div>
+            </div>
+            <button class="text-xs bg-gray-800 text-yellow-400 px-3 py-1.5 rounded-lg">+ Log</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: Get a Coach -->
+    <section id="tab-coach" class="tab-content hidden space-y-6">
+      <div class="card-bg p-6 rounded-2xl border border-yellow-400/40 text-center relative overflow-hidden">
+        <span class="bg-yellow-400 text-black text-xs font-bold uppercase px-3 py-1 rounded-full inline-block mb-3">Most Popular</span>
+        <h2 class="text-2xl font-extrabold text-white">12-Week Transformation Program</h2>
+        <p class="text-sm text-gray-400 mt-1">Get personal 1-on-1 coaching & tailored lifestyle transformation</p>
+
+        <div class="my-6">
+          <span class="text-3xl font-extrabold text-yellow-400">₹14,999</span>
+          <span class="text-sm text-gray-500 line-through ml-2">₹21,428</span>
+          <span class="text-xs bg-green-500/20 text-green-400 px-2 py-0.5 rounded ml-2">30% OFF</span>
+        </div>
+
+        <ul class="text-left text-sm space-y-2 mb-6 text-gray-300">
+          <li class="flex items-center">✓ Proper initial health & diet assessment</li>
+          <li class="flex items-center">✓ Closely monitoring and continuous diet adjustments</li>
+          <li class="flex items-center">✓ Weekly check-in video & audio calls</li>
+          <li class="flex items-center">✓ 24/7 WhatsApp direct support</li>
+          <li class="flex items-center">✓ Customized home & gym workout plans</li>
+        </ul>
+
+        <a href="https://wa.me/?text=Hi!%20I%20want%20to%20enroll%20in%20the%2012-Week%20CraveFit%20Coaching%20Program." target="_blank" class="block w-full bg-yellow-400 text-black font-bold py-3.5 rounded-xl hover:bg-yellow-300 transition-colors">
+          Enroll Now (₹14,999)
+        </a>
+      </div>
+    </section>
+
+    <!-- TAB 4: BMR Calculator -->
+    <section id="tab-bmr" class="tab-content hidden space-y-6">
+      <div class="card-bg p-5 rounded-2xl border border-gray-800">
+        <h2 class="text-xl font-bold text-yellow-400 mb-4">BMR Calculator</h2>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-xs text-gray-400 mb-1">Gender</label>
+            <select id="bmrGender" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-3 text-sm">
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs text-gray-400 mb-1">Age</label>
+              <input type="number" id="bmrAge" value="30" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-3 text-sm">
+            </div>
+            <div>
+              <label class="block text-xs text-gray-400 mb-1">Weight (kg)</label>
+              <input type="number" id="bmrWeight" value="70" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-3 text-sm">
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs text-gray-400 mb-1">Height (cm)</label>
+            <input type="number" id="bmrHeight" value="175" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-3 text-sm">
+          </div>
+          <button onclick="calculateBMR()" class="w-full bg-yellow-400 text-black font-bold py-3 rounded-xl">Calculate BMR</button>
+          
+          <div id="bmrResult" class="hidden text-center p-4 bg-gray-900 rounded-xl border border-yellow-400/30">
+            <div class="text-xs text-gray-400">Your Basal Metabolic Rate</div>
+            <div id="bmrValue" class="text-2xl font-bold text-yellow-400 mt-1">-- kcal/day</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: Admin Portal -->
+    <section id="tab-admin" class="tab-content hidden space-y-6">
+      <div class="card-bg p-5 rounded-2xl border border-gray-800">
+        <h2 class="text-xl font-bold text-yellow-400 mb-2">Admin Client Review Portal</h2>
+        <p class="text-xs text-gray-400 mb-4">Monitor client progress, photos, and weekly check-ins.</p>
+        <div class="p-4 bg-gray-900 rounded-xl border border-gray-800">
+          <div class="text-sm font-semibold text-gray-200">No client submissions yet</div>
+          <div class="text-xs text-gray-500 mt-1">Client progress logs will sync here via your Family/Client Sync Key.</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Navigation Bar -->
+  <nav class="fixed bottom-0 inset-x-0 card-bg border-t border-gray-800 py-2 px-4 z-40 flex justify-around text-center">
+    <button onclick="switchTab('assessment')" class="nav-btn text-yellow-400 flex flex-col items-center">
+      <span class="text-lg">📋</span>
+      <span class="text-[10px]">Diet</span>
+    </button>
+    <button onclick="switchTab('tracker')" class="nav-btn text-gray-400 flex flex-col items-center">
+      <span class="text-lg">🥗</span>
+      <span class="text-[10px]">Tracker</span>
+    </button>
+    <button onclick="switchTab('coach')" class="nav-btn text-gray-400 flex flex-col items-center">
+      <span class="text-lg">⭐</span>
+      <span class="text-[10px]">Coach</span>
+    </button>
+    <button onclick="switchTab('bmr')" class="nav-btn text-gray-400 flex flex-col items-center">
+      <span class="text-lg">🔥</span>
+      <span class="text-[10px]">BMR</span>
+    </button>
+  </nav>
+
+  <!-- Sync Key Modal -->
+  <div id="syncModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="card-bg p-6 rounded-2xl border border-gray-800 max-w-sm w-full space-y-4">
+      <h3 class="text-lg font-bold text-yellow-400">Device Sync Key</h3>
+      <p class="text-xs text-gray-400">Enter a shared family key so you and your wife can sync logs in real-time.</p>
+      <input type="text" id="syncKeyInput" placeholder="e.g. OUR-HOME-DIET" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-3 text-sm text-yellow-400 font-bold outline-none">
+      <div class="flex space-x-2">
+        <button onclick="saveSyncKey()" class="flex-1 bg-yellow-400 text-black font-bold py-2.5 rounded-lg text-sm">Save Key</button>
+        <button onclick="toggleSyncModal()" class="flex-1 bg-gray-800 text-gray-300 font-bold py-2.5 rounded-lg text-sm">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Hide Splash Screen
+    setTimeout(() => {
+      const splash = document.getElementById('splashScreen');
+      splash.classList.add('opacity-0');
+      setTimeout(() => splash.classList.add('hidden'), 700);
+    }, 1500);
+
+    // Tab Navigation Switcher
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.getElementById('tab-' + tabId).classList.remove('hidden');
+    }
+
+    // BMR Calculation
+    function calculateBMR() {
+      const gender = document.getElementById('bmrGender').value;
+      const age = parseFloat(document.getElementById('bmrAge').value);
+      const weight = parseFloat(document.getElementById('bmrWeight').value);
+      const height = parseFloat(document.getElementById('bmrHeight').value);
+
+      let bmr = 0;
+      if (gender === 'male') {
+        bmr = (10 * weight) + (6.25 * height) - (5 * age) + 5;
+      } else {
+        bmr = (10 * weight) + (6.25 * height) - (5 * age) - 161;
+      }
+
+      document.getElementById('bmrValue').innerText = Math.round(bmr) + " kcal/day";
+      document.getElementById('bmrResult').classList.remove('hidden');
+    }
+
+    // Assessment Handler
+    function handleAssessment(e) {
+      e.preventDefault();
+      const name = document.getElementById('userName').value;
+      const phone = document.getElementById('userPhone').value;
+      const diet = document.getElementById('userDiet').value;
+
+      const message = `Hi! I have generated my CraveFit 1,500 Calorie Home-Made Diet Plan.%0A%0AName: ${encodeURIComponent(name)}%0ADiet: ${encodeURIComponent(diet)}`;
+      window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
+    }
+
+    // Sync Modal Toggles
+    function toggleSyncModal() {
+      document.getElementById('syncModal').classList.toggle('hidden');
+    }
+
+    function saveSyncKey() {
+      const key = document.getElementById('syncKeyInput').value;
+      if(key) {
+        localStorage.setItem('cravefit_sync_key', key);
+        alert('Sync Key set to: ' + key);
+        toggleSyncModal();
+      }
+    }
+  </script>
+</body>
+</html>
