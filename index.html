@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>FITGO — Fitness That Fits Your Life</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              black: '#0a0b0d',
+              charcoal: '#14161a',
+              greyCard: '#1d2128',
+              greyBorder: '#2e3440',
+              yellow: '#ffe600',
+              yellowGlow: 'rgba(255, 230, 0, 0.25)'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #0a0b0d;
+      color: #f1f5f9;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    .glass-card {
+      background: #14161a;
+      border: 1px solid #2e3440;
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.8);
+    }
+    
+    .yellow-glow-box {
+      box-shadow: 0 0 20px rgba(255, 230, 0, 0.2);
+    }
+
+    .yellow-glow-text {
+      text-shadow: 0 0 12px rgba(255, 230, 0, 0.5);
+    }
+
+    .tab-active {
+      color: #ffe600 !important;
+      border-bottom: 2px solid #ffe600;
+    }
+
+    @media print {
+      body { background-color: #ffffff !important; color: #000000 !important; }
+      nav, header, button, .no-print { display: none !important; }
+      .glass-card { background: #ffffff !important; color: #000000 !important; border: 1px solid #ccc !important; box-shadow: none !important; }
+      .text-slate-400, .text-slate-300, .text-slate-200 { color: #333333 !important; }
+      .text-brand-yellow { color: #000000 !important; font-weight: bold; }
+    }
+  </style>
+</head>
+<body class="pb-28 text-slate-100 antialiased selection:bg-brand-yellow selection:text-black">
+
+  <!-- Header Section -->
+  <header class="sticky top-0 z-50 bg-brand-black/95 border-b border-brand-greyBorder px-4 py-3 flex justify-between items-center backdrop-blur-md">
+    <div class="flex items-center gap-2 cursor-pointer" onclick="switchTab('home')">
+      <div class="bg-brand-yellow px-3 py-1 rounded-lg text-black font-black text-sm tracking-widest yellow-glow-box">
+        FITGO
+      </div>
+      <span class="text-[10px] bg-brand-yellow/10 border border-brand-yellow/30 text-brand-yellow px-2 py-0.5 rounded-full font-extrabold uppercase">
+        v5.0 ELITE
+      </span>
+    </div>
+    
+    <div class="flex items-center gap-2">
+      <button onclick="switchTab('trackers')" class="bg-brand-greyCard border border-brand-greyBorder hover:border-brand-yellow text-slate-200 text-xs px-3 py-1.5 rounded-lg transition">
+        👤 Profile
+      </button>
+      <button onclick="switchTab('subscription')" class="bg-brand-yellow hover:bg-yellow-400 text-black font-extrabold text-xs px-3 py-1.5 rounded-lg transition yellow-glow-box">
+        Join Coaching
+      </button>
+    </div>
+  </header>
+
+  <!-- Main View Area -->
+  <main class="max-w-md mx-auto p-4 space-y-5">
+
+    <!-- ==================== TAB 1: HOME ==================== -->
+    <div id="tab-home" class="space-y-5 pt-1">
+      
+      <!-- Hero Banner -->
+      <div class="text-center space-y-2 py-2">
+        <div class="inline-block bg-gradient-to-r from-brand-yellow via-yellow-200 to-amber-400 bg-clip-text text-transparent font-black text-4xl tracking-wider yellow-glow-text">
+          FITGO
+        </div>
+        <h1 class="text-lg font-bold text-white tracking-wide">
+          FITNESS THAT FITS YOUR LIFE.
+        </h1>
+        <p class="text-brand-yellow text-xs font-semibold tracking-widest uppercase">
+          ✦ EAT BETTER. TRAIN SMARTER. LIVE STRONGER. ✦
+        </p>
+      </div>
+
+      <!-- Quick Assessment & BMR/TDEE Card -->
+      <div class="glass-card rounded-2xl p-5 space-y-4 border border-brand-yellow/30 yellow-glow-box">
+        <div class="flex items-center justify-between">
+          <span class="text-[10px] font-bold tracking-wider text-brand-yellow bg-brand-yellow/10 px-2.5 py-1 rounded-full border border-brand-yellow/30 uppercase">
+            ⚡ METABOLIC CALCULATION ENGINE
+          </span>
+          <span class="text-[10px] text-slate-400 font-mono">BMR + TDEE</span>
+        </div>
+
+        <h2 class="text-sm font-bold text-white leading-snug">
+          Calculate Maintenance Calories, Deficit & Macros
+        </h2>
+
+        <!-- Quick Inputs -->
+        <div class="grid grid-cols-2 gap-2 text-xs">
+          <div>
+            <label class="text-[10px] text-slate-400 block mb-1">Age (Years)</label>
+            <input type="number" id="quick-age" value="30" class="w-full bg-brand-black border border-brand-greyBorder rounded-xl p-2.5 text-white font-semibold focus:border-brand-yellow outline-none">
+          </div>
+          <div>
+            <label class="text-[10px] text-slate-400 block mb-1">Current Weight (kg)</label>
+            <input type="number" id="quick-weight" value="70.0" step="0.1" class="w-full bg-brand-black border border-brand-greyBorder rounded-xl p-2.5 text-white font-semibold focus:border-brand-yellow outline-none">
+          </div>
+          <div>
+            <label class="text-[10px] text-slate-400 block mb-1">Height (cm)</label>
+            <input type="number" id="quick-height" value="170" class="w-full bg-brand-black border border-brand-greyBorder rounded-xl p-2.5 text-white font-semibold focus:border-brand-yellow outline-none">
+          </div>
+          <div>
+            <label class="text-[10px] text-slate-400 block mb-1">Gender</label>
+            <select id="quick-gender" class="w-full bg-brand-black border border-brand-greyBorder rounded-xl p-2.5 text-white font-semibold focus:border-brand-yellow outline-none">
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-[10px] text-slate-400 block mb-1">Activity Level</label>
+          <select id="quick-activity" class="w-full bg-brand-black border border-brand-greyBorder rounded-xl p-2.5 text-xs text-white font-semibold focus:border-brand-yellow outline-none">
+            <option value="1.2">Sedentary (Little or no exercise)</option>
+            <option value="1.375">Lightly Active (Light exercise 1-3 days/wk)</option>
+            <option value="1.55" selected>Moderately Active (Moderate exercise 3-5 days/wk)</option>
+            <option value="1.725">Very Active (Hard exercise 6-7 days/wk)</option>
+          </select>
+        </div>
+
+        <button onclick="calculateAndNavigate()" class="w-full bg-brand-yellow hover:bg-yellow-400 text-black font-black py-3 rounded-xl text-xs uppercase tracking-wider transition yellow-glow-box flex items-center justify-center gap-2">
+          <span>⚡ Generate Custom 6-Meal Diet Blueprint</span> →
+        </button>
+      </div>
+
+      <!-- Verified Success Stories -->
+      <div class="space-y-3">
+        <div class="flex justify-between items-center px-1">
+          <h3 class="text-xs font-bold text-slate-300 tracking-wider uppercase flex items-center gap-1.5">
+            <span>🔥</span> Verified Transformations
+          </h3>
+          <span class="text-[10px] text-brand-yellow font-bold">100+ Success Stories</span>
+        </div>
+
+        <!-- Story 1 -->
+        <div class="glass-card rounded-2xl p-4 space-y-3">
+          <div class="flex justify-between items-center border-b border-brand-greyBorder pb-2">
+            <div>
+              <h4 class="text-xs font-bold text-white">Verified Client</h4>
+              <p class="text-[10px] text-slate-400">Visceral & Fat Reduction Plan</p>
+            </div>
+            <span class="bg-brand-yellow/15 border border-brand-yellow/40 text-brand-yellow text-[10px] px-2.5 py-1 rounded-full font-black">
+              -6.2 kg in 8 Wks
+            </span>
+          </div>
+          <p class="text-xs text-slate-300 italic leading-relaxed">
+            "Reduced visceral fat and acidity without skipping meals. Raw-weight portioning and structured macros kept my energy high throughout the day."
+          </p>
+        </div>
+
+        <!-- Story 2 -->
+        <div class="glass-card rounded-2xl p-4 space-y-3">
+          <div class="flex justify-between items-center border-b border-brand-greyBorder pb-2">
+            <div>
+              <h4 class="text-xs font-bold text-white">Rajesh Kumar</h4>
+              <p class="text-[10px] text-slate-400">Executive Recomposition Plan</p>
+            </div>
+            <span class="bg-brand-yellow/15 border border-brand-yellow/40 text-brand-yellow text-[10px] px-2.5 py-1 rounded-full font-black">
+              -9.5 kg in 12 Wks
+            </span>
+          </div>
+          <p class="text-xs text-slate-300 italic leading-relaxed">
+            "Structured evening snacks prevented late-night junk cravings. Lost 4 inches off my waist while maintaining strength."
+          </p>
+        </div>
+      </div>
+
+      <!-- Food Option Selection Quick Banner -->
+      <div class="glass-card rounded-2xl p-4 space-y-3 border border-brand-yellow/30 text-center">
+        <h3 class="text-xs font-bold text-white uppercase">Choose Your Diet Plan Options</h3>
+        <p class="text-[11px] text-slate-400">Switch between Veg, Eggetarian & Non-Veg anytime</p>
+        <div class="grid grid-cols-3 gap-2">
+          <button onclick="setDietType('veg'); switchTab('plan')" class="bg-brand-yellow text-black font-extrabold text-xs py-2 rounded-xl">Pure Veg</button>
+          <button onclick="setDietType('egg'); switchTab('plan')" class="bg-brand-greyCard text-slate-200 border border-brand-greyBorder font-bold text-xs py-2 rounded-xl">Eggetarian</button>
+          <button onclick="setDietType('nonveg'); switchTab('plan')" class="bg-brand-greyCard text-slate-200 border border-brand-greyBorder font-bold text-xs py-2 rounded-xl">Non-Veg</button>
+        </div>
+      </div>
+
+      <!-- Direct Coaching WhatsApp CTA -->
+      <div class="glass-card rounded-2xl p-4 text-center space-y-3 border border-brand-yellow/30">
+        <h3 class="text-xs font-bold text-brand-yellow uppercase tracking-wider">Need Personal 1-on-1 Guidance?</h3>
+        <p class="text-xs text-slate-300">Connect directly on WhatsApp for custom macro tweaks and weekly follow-ups.</p>
+        <a href="https://wa.me/919000000000?text=Hi%20FITGO,%20I%20want%20to%20know%20more%20about%20the%2012-Week%20Metabolic%20Coaching%20Program." target="_blank" class="block">
+          <button class="w-full bg-brand-yellow hover:bg-yellow-400 text-black font-extrabold py-3 rounded-xl text-xs transition yellow-glow-box">
+            💬 Chat on WhatsApp
+          </button>
+        </a>
+      </div>
+
+    </div>
+
+    <!-- ==================== TAB 2: USER PROFILE & TRACKERS ==================== -->
+    <div id="tab-trackers" class="hidden space-y-5 pt-1">
+      
+      <!-- Profile Header & Avatar Card -->
+      <div class="glass-card rounded-2xl p-5 border border-brand-greyBorder space-y-4">
+        <div class="flex items-center gap-4">
+          <div class="relative">
+            <div id="avatar-container" class="w-16 h-16 rounded-full bg-brand-black border-2 border-brand-yellow flex items-center justify-center text-xl overflow-hidden yellow-glow-box">
+              <span id="avatar-initials" class="font-black text-brand-yellow">FG</span>
+              <img id="avatar-img" class="w-full h-full object-cover hidden" alt="Profile">
+            </div>
+            <label for="upload-avatar" class="absolute -bottom-1 -right-1 bg-brand-yellow text-black text-[10px] p-1 rounded-full cursor-pointer font-bold">
+              📷
+            </label>
+            <input type="file" id="upload-avatar" accept="image/*" class="hidden" onchange="loadAvatar(event)">
+          </div>
+
+          <div>
+            <h2 id="profile-display-name" class="text-base font-bold text-white">Member Profile</h2>
+            <p class="text-xs text-brand-yellow font-mono">Member ID: FIT-1001</p>
+            <p class="text-[10px] text-slate-400">Goal: Fat Loss & Body Recomposition</p>
+          </div>
+        </div>
+
+        <!-- Body Stat Badges -->
+        <div class="grid grid-cols-3 gap-2 text-center text-xs border-t border-brand-greyBorder pt-3">
+          <div>
+            <span class="text-[10px] text-slate-400 block">Height</span>
+            <span class="font-bold text-white" id="stat-height">170 cm</span>
+          </div>
+          <div>
+            <span class="text-[10px] text-slate-400 block">Start Weight</span>
+            <span class="font-bold text-slate-200" id="stat-start-weight">70.0 kg</span>
+          </div>
+          <div>
+            <span class="text-[10px] text-slate-400 block">Current Weight</span>
+            <span class="font-bold text-brand-yellow" id="stat-current-weight">70.0 kg</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Body Measurements Log -->
+      <div class="glass-card rounded-2xl p-4 space-y-3">
+        <div class="flex justify-between items-center border-b border-brand-greyBorder pb-2">
+          <h3 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+            📐 Body Measurements Log
+          </h3>
+          <span class="text-[10px] text-brand-yellow">Updated Today</span>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 text-xs">
+          <div>
+            <label class="text-[10px] text-slate-400 block mb-1">Waist (Inches)</label>
+            <input type="number" id="meas-waist" value="32" step="0.5" class="w-full bg-brand-black border border-brand-greyBorder rounded-xl p-2.5 text-white font-semibold focus:border-brand-yellow outline-none">
+          </div>
+          <div>
+            <label class="text-[10px] text-slate-400 block mb-1">Hips (Inches)</label>
+            <input type="number" id="meas-hips" value="36" step="0.5" class="w-full bg-brand-black border border-brand-greyBorder rounded-xl p-2.5 text-white font-semibold focus:border-brand-yellow outline-none">
+          </div>
+          <div>
+            <label class="text-[10px] text-slate-400 block mb-1">Chest (Inches)</label>
+            <input type="number" id="meas-chest" value="38" step="0.5" class="w-full bg-brand-black border border-brand-greyBorder rounded-xl p-2.5 text-white font-semibold focus:border-brand-yellow outline-none">
+          </div>
+          <div>
+            <label class="text-[10px] text-slate-400 block mb-1">Visceral Fat Level</label>
+            <input type="number" id="meas-visceral" value="5" class="w-full bg-brand-black border border-brand-greyBorder rounded-xl p-2.5 text-white font-semibold focus:border-brand-yellow outline-none">
+          </div>
+        </div>
+
+        <button onclick="saveMeasurements()" class="w-full bg-brand-greyBorder hover:bg-slate-700 text-brand-yellow font-bold py-2.5 rounded-xl text-xs transition border border-brand-yellow/30">
+          Save Body Measurements
+        </button>
+      </div>
+
+      <!-- Daily Weight History Logger -->
+      <div class="glass-card rounded-2xl p-4 space-y-3">
+        <h3 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+          ⚖️ Daily Weight Update
+        </h3>
+
+        <div class="flex gap-2">
+          <input type="number" id="log-weight-input" placeholder="Enter weight (kg)" step="0.1" class="flex-1 bg-brand-black border border-brand-greyBorder rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-brand-yellow">
+          <button onclick="addWeightLog()" class="bg-brand-yellow text-black font-extrabold px-4 py-2 rounded-xl text-xs yellow-glow-box">
+            Log Weight
+          </button>
+        </div>
+
+        <div class="space-y-1 pt-2">
+          <span class="text-[10px] text-slate-400 uppercase font-mono">Recent Weight Trend:</span>
+          <div id="weight-history-list" class="space-y-1.5 text-xs">
+            <div class="flex justify-between bg-brand-black p-2 rounded-lg border border-brand-greyBorder text-brand-yellow">
+              <span>Today</span>
+              <span class="font-bold text-brand-yellow" id="weight-entry-current">70.0 kg</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Transformation Progress Photo Upload -->
+      <div class="glass-card rounded-2xl p-4 space-y-3">
+        <h3 class="text-xs font-bold text-white uppercase tracking-wider">
+          📸 Progress Photo Uploader
+        </h3>
+        <p class="text-[11px] text-slate-400">Upload side-by-side photos to track body composition changes.</p>
+        
+        <div class="grid grid-cols-2 gap-2">
+          <div class="bg-brand-black border border-dashed border-brand-greyBorder rounded-xl p-3 text-center space-y-2">
+            <span class="text-[10px] text-slate-400 block font-bold">BEFORE PHOTO</span>
+            <input type="file" accept="image/*" id="before-photo-input" class="hidden" onchange="previewPhoto(event, 'before-preview')">
+            <button onclick="document.getElementById('before-photo-input').click()" class="bg-brand-greyCard text-slate-200 text-[10px] px-2.5 py-1.5 rounded-lg border border-brand-greyBorder">
+              Choose Photo
+            </button>
+            <div id="before-preview" class="w-full h-24 rounded-lg bg-slate-900 overflow-hidden flex items-center justify-center text-[10px] text-slate-500">
+              No Image
+            </div>
+          </div>
+
+          <div class="bg-brand-black border border-dashed border-brand-greyBorder rounded-xl p-3 text-center space-y-2">
+            <span class="text-[10px] text-brand-yellow block font-bold">CURRENT PHOTO</span>
+            <input type="file" accept="image/*" id="after-photo-input" class="hidden" onchange="previewPhoto(event, 'after-preview')">
+            <button onclick="document.getElementById('after-photo-input').click()" class="bg-brand-greyCard text-slate-200 text-[10px] px-2.5 py-1.5 rounded-lg border border-brand-greyBorder">
+              Choose Photo
+            </button>
+            <div id="after-preview" class="w-full h-24 rounded-lg bg-slate-900 overflow-hidden flex items-center justify-center text-[10px] text-slate-500">
+              No Image
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ==================== TAB 3: DIET BLUEPRINT ==================== -->
+    <div id="tab-plan" class="hidden space-y-4 pt-1">
+
+      <!-- Metabolic Header Box -->
+      <div class="glass-card rounded-2xl p-4 space-y-3 border-2 border-brand-yellow/50 yellow-glow-box">
+        <div class="flex justify-between items-center border-b border-brand-greyBorder pb-2">
+          <span class="text-[9px] font-black text-brand-yellow tracking-widest uppercase">
+            FITGO METABOLIC NUTRITION BLUEPRINT
+          </span>
+          <span class="text-[9px] bg-brand-yellow/20 text-brand-yellow px-2 py-0.5 rounded font-mono font-bold">
+            ● LIVE PLAN
+          </span>
+        </div>
+
+        <div>
+          <h2 id="plan-user-name" class="text-base font-extrabold text-white">Customized Nutrition Plan</h2>
+          <p id="plan-user-meta" class="text-xs text-slate-300">Age: 30 | Weight: 70 kg | Height: 170 cm</p>
+        </div>
+
+        <!-- Food Option Selector Links -->
+        <div class="pt-1">
+          <label class="text-[10px] text-slate-400 block mb-1 font-bold">SELECT DIET PREFERENCE:</label>
+          <div class="grid grid-cols-3 gap-1.5 text-center text-[10px]">
+            <button onclick="setDietType('veg')" id="btn-diet-veg" class="bg-brand-yellow text-black font-extrabold py-2 rounded-lg border border-brand-yellow">
+              100% Pure Veg
+            </button>
+            <button onclick="setDietType('egg')" id="btn-diet-egg" class="bg-brand-black text-slate-300 font-semibold py-2 rounded-lg border border-brand-greyBorder">
+              Eggetarian
+            </button>
+            <button onclick="setDietType('nonveg')" id="btn-diet-nonveg" class="bg-brand-black text-slate-300 font-semibold py-2 rounded-lg border border-brand-greyBorder">
+              Non-Veg
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Macro Dashboard -->
+      <div class="grid grid-cols-4 gap-1.5 text-center">
+        <div class="glass-card p-2.5 rounded-xl">
+          <div id="calc-bmr" class="text-brand-yellow text-xs font-black">1650</div>
+          <div class="text-[8px] text-slate-400 uppercase font-bold">BMR kcal</div>
+        </div>
+        <div class="glass-card p-2.5 rounded-xl">
+          <div id="calc-tdee" class="text-white text-xs font-black">2200</div>
+          <div class="text-[8px] text-slate-400 uppercase font-bold">TDEE kcal</div>
+        </div>
+        <div class="glass-card p-2.5 rounded-xl">
+          <div id="calc-target" class="text-emerald-400 text-xs font-black">1800</div>
+          <div class="text-[8px] text-slate-400 uppercase font-bold">Target Deficit</div>
+        </div>
+        <div class="glass-card p-2.5 rounded-xl">
+          <div id="calc-water" class="text-cyan-400 text-xs font-black">3.0 L</div>
+          <div class="text-[8px] text-slate-400 uppercase font-bold">Water Goal</div>
+        </div>
+      </div>
+
+      <!-- Macros Breakdown -->
+      <div class="glass-card rounded-xl p-3 flex justify-around text-center text-xs">
+        <div>
+          <span class="text-slate-400 block text-[9px]">PROTEIN</span>
+          <span id="calc-protein" class="font-bold text-brand-yellow">120g</span>
+        </div>
+        <div class="border-r border-brand-greyBorder"></div>
+        <div>
+          <span class="text-slate-400 block text-[9px]">CARBS</span>
+          <span id="calc-carbs" class="font-bold text-white">180g</span>
+        </div>
+        <div class="border-r border-brand-greyBorder"></div>
+        <div>
+          <span class="text-slate-400 block text-[9px]">FATS</span>
+          <span id="calc-fats" class="font-bold text-amber-400">50g</span>
+        </div>
+      </div>
+
+      <!-- 6-MEAL SCHEDULE BLUEPRINT -->
+      <div class="glass-card rounded-2xl p-4 space-y-4">
+        <div class="border-b border-brand-greyBorder pb-2 flex justify-between items-center">
+          <h3 class="text-xs font-bold text-white uppercase tracking-wider">
+            6-Meal Daily Schedule (Raw Portion Weights)
+          </h3>
+        </div>
+
+        <!-- Meal 1 -->
+        <div class="space-y-1 text-xs">
+          <div class="flex justify-between items-center text-brand-yellow font-bold">
+            <span>06:30 AM — MORNING METABOLIC BOOSTER</span>
+          </div>
+          <div class="bg-brand-black p-3 rounded-xl border border-brand-greyBorder text-slate-300 space-y-1">
+            <p><strong>• Saunf-Jeera Warm Water:</strong> Boil 1/2 tsp fennel seeds + 1/2 tsp cumin seeds in 300ml water.</p>
+            <p><strong>• Soaked Nuts:</strong> 5 soaked almonds (peeled) + 2 walnut halves.</p>
+          </div>
+        </div>
+
+        <!-- Meal 2 -->
+        <div class="space-y-1 text-xs">
+          <div class="flex justify-between items-center text-brand-yellow font-bold">
+            <span>09:30 AM — BREAKFAST</span>
+          </div>
+          <div id="breakfast-content" class="bg-brand-black p-3 rounded-xl border border-brand-greyBorder text-slate-300 space-y-1">
+            <p><strong>• Option 1 (Moong Dal Cheela):</strong> 2 Moong dal cheelas (50g raw split moong dal) + 50g grated paneer stuffing.</p>
+            <p><strong>• Option 2 (Oats Veg Idli):</strong> 3 small steamed oats idlis (50g raw oats) + 1 bowl vegetable sambhar.</p>
+          </div>
+        </div>
+
+        <!-- Meal 3 -->
+        <div class="space-y-1 text-xs">
+          <div class="flex justify-between items-center text-brand-yellow font-bold">
+            <span>11:30 AM — MID-MORNING FRUIT SNACK</span>
+          </div>
+          <div class="bg-brand-black p-3 rounded-xl border border-brand-greyBorder text-slate-300 space-y-1">
+            <p><strong>• Fresh Fruit:</strong> 150g Papaya OR 1 Apple + 1 tsp soaked chia seeds in 200ml water.</p>
+          </div>
+        </div>
+
+        <!-- Meal 4 -->
+        <div class="space-y-1 text-xs">
+          <div class="flex justify-between items-center text-brand-yellow font-bold">
+            <span>01:30 PM — LUNCH</span>
+          </div>
+          <div id="lunch-content" class="bg-brand-black p-3 rounded-xl border border-brand-greyBorder text-slate-300 space-y-1">
+            <p><strong>• Option 1 (Multigrain Thali):</strong> 2 Phulkas (50g atta) + 1 bowl Dal (40g raw dal) + 1 bowl green veg + salad.</p>
+            <p><strong>• Option 2 (Quinoa Protein Bowl):</strong> 50g raw cooked quinoa + 100g sauteed veggies + 75g paneer cubes.</p>
+          </div>
+        </div>
+
+        <!-- Meal 5 -->
+        <div class="space-y-1 text-xs">
+          <div class="flex justify-between items-center text-brand-yellow font-bold">
+            <span>05:30 PM — EVENING CRUNCH SNACK</span>
+          </div>
+          <div class="bg-brand-black p-3 rounded-xl border border-brand-greyBorder text-slate-300 space-y-1">
+            <p><strong>• Roasted Snack:</strong> 30g dry-roasted Makhana (foxnuts) OR 40g dry-roasted Chana + Green Tea.</p>
+          </div>
+        </div>
+
+        <!-- Meal 6 -->
+        <div class="space-y-1 text-xs">
+          <div class="flex justify-between items-center text-brand-yellow font-bold">
+            <span>08:00 PM — LIGHT DINNER</span>
+          </div>
+          <div id="dinner-content" class="bg-brand-black p-3 rounded-xl border border-brand-greyBorder text-slate-300 space-y-1">
+            <p><strong>• Option 1 (Dalia Khichdi):</strong> 40g raw broken wheat & moong dal khichdi loaded with veggies.</p>
+            <p><strong>• Option 2 (Clear Soup & Paneer):</strong> 1 large bowl clear vegetable soup + 75g griddled paneer slices.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- BOTTOM DIET FOOD OPTION SELECTOR LINK -->
+      <div class="glass-card rounded-2xl p-4 space-y-2 text-center border border-brand-yellow/40">
+        <span class="text-[10px] text-brand-yellow font-bold tracking-wider uppercase">Food Option Switcher</span>
+        <div class="grid grid-cols-3 gap-1.5 text-center text-[10px]">
+          <button onclick="setDietType('veg')" class="bg-brand-yellow text-black font-extrabold py-2 rounded-lg">Pure Veg</button>
+          <button onclick="setDietType('egg')" class="bg-brand-greyCard text-slate-200 font-bold py-2 rounded-lg border border-brand-greyBorder">Eggetarian</button>
+          <button onclick="setDietType('nonveg')" class="bg-brand-greyCard text-slate-200 font-bold py-2 rounded-lg border border-brand-greyBorder">Non-Veg</button>
+        </div>
+      </div>
+
+      <!-- Print Button -->
+      <button onclick="window.print()" class="w-full bg-brand-greyCard hover:bg-slate-700 text-slate-200 font-bold py-3 rounded-xl text-xs transition border border-brand-greyBorder flex items-center justify-center gap-2">
+        🖨️ Download / Print Complete Blueprint PDF
+      </button>
+
+    </div>
+
+    <!-- ==================== TAB 4: SUBSCRIPTION PLANS ==================== -->
+    <div id="tab-subscription" class="hidden space-y-4 pt-1">
+      <div class="text-center space-y-1">
+        <h2 class="text-base font-bold text-white">FITGO Coaching Programs</h2>
+        <p class="text-xs text-slate-400">1-on-1 Personalized Coaching for Sustainable Fat Loss.</p>
+      </div>
+
+      <!-- 12-Week Main Plan -->
+      <div class="glass-card rounded-2xl p-5 border-2 border-brand-yellow yellow-glow-box space-y-4 relative overflow-hidden">
+        <div class="bg-brand-yellow text-black font-black text-[9px] px-3 py-1 absolute top-0 right-0 rounded-bl-xl uppercase tracking-wider">
+          MOST POPULAR
+        </div>
+
+        <div>
+          <h3 class="text-base font-extrabold text-white">12-Week Metabolic Transformation</h3>
+          <p class="text-xs text-slate-400">Complete lifestyle & active longevity overhaul</p>
+        </div>
+
+        <div class="text-2xl font-black text-brand-yellow">
+          ₹14,999 <span class="text-xs text-slate-400 font-normal">/ 3 Months</span>
+        </div>
+
+        <ul class="text-xs text-slate-300 space-y-2 border-t border-brand-greyBorder pt-3">
+          <li class="flex items-center gap-2">• Customized Raw-Weight 6-Meal Plans</li>
+          <li class="flex items-center gap-2">• Weekly Progress & Visceral Fat Check-ins</li>
+          <li class="flex items-center gap-2">• Direct WhatsApp Access to Senior Nutritionist</li>
+          <li class="flex items-center gap-2">• Gentle Joint-Safe Home Mobility Routines</li>
+        </ul>
+
+        <a href="https://wa.me/919000000000?text=Hi%20FITGO,%20I%20want%20to%20enroll%20in%20the%2012-Week%20Metabolic%20Coaching%20Program." target="_blank" class="block">
+          <button class="w-full bg-brand-yellow hover:bg-yellow-400 text-black font-black py-3 rounded-xl text-xs transition yellow-glow-box">
+            Enroll via WhatsApp
+          </button>
+        </a>
+      </div>
+
+      <!-- 4-Week Plan -->
+      <div class="glass-card rounded-2xl p-4 space-y-3">
+        <h3 class="text-sm font-bold text-white">4-Week Jumpstart Plan</h3>
+        <div class="text-lg font-bold text-brand-yellow">₹5,999 <span class="text-xs text-slate-400 font-normal">/ Month</span></div>
+        <a href="https://wa.me/919000000000?text=Hi%20FITGO,%20I%20want%20to%20know%20about%20the%204-Week%20Jumpstart%20Plan." target="_blank" class="block">
+          <button class="w-full bg-brand-greyCard hover:bg-slate-700 text-white font-bold py-2.5 rounded-xl text-xs border border-brand-greyBorder transition">
+            Inquire via WhatsApp
+          </button>
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Bottom Navigation Bar -->
+  <nav class="fixed bottom-0 left-0 right-0 bg-brand-black/95 border-t border-brand-greyBorder px-4 py-2.5 flex justify-around text-slate-400 text-[11px] z-50 backdrop-blur-md">
+    <button id="nav-home" onclick="switchTab('home')" class="flex flex-col items-center gap-1 tab-active transition font-bold">
+      <span class="text-sm">🏠</span> Home
+    </button>
+    <button id="nav-trackers" onclick="switchTab('trackers')" class="flex flex-col items-center gap-1 transition">
+      <span class="text-sm">📊</span> Profile
+    </button>
+    <button id="nav-plan" onclick="switchTab('plan')" class="flex flex-col items-center gap-1 transition">
+      <span class="text-sm">🥗</span> Diet Plan
+    </button>
+    <button id="nav-subscription" onclick="switchTab('subscription')" class="flex flex-col items-center gap-1 transition">
+      <span class="text-sm">💎</span> Plans
+    </button>
+  </nav>
+
+  <!-- JavaScript Logic -->
+  <script>
+    function switchTab(tabId) {
+      document.getElementById('tab-home').classList.add('hidden');
+      document.getElementById('tab-trackers').classList.add('hidden');
+      document.getElementById('tab-plan').classList.add('hidden');
+      document.getElementById('tab-subscription').classList.add('hidden');
+
+      ['home', 'trackers', 'plan', 'subscription'].forEach(id => {
+        const navBtn = document.getElementById('nav-' + id);
+        if (navBtn) {
+          navBtn.classList.remove('tab-active');
+          navBtn.classList.remove('text-brand-yellow');
+        }
+      });
+
+      document.getElementById('tab-' + tabId).classList.remove('hidden');
+      const activeNav = document.getElementById('nav-' + tabId);
+      if (activeNav) {
+        activeNav.classList.add('tab-active');
+      }
+
+      window.scrollTo(0, 0);
+    }
+
+    function loadAvatar(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('avatar-img').src = e.target.result;
+          document.getElementById('avatar-img').classList.remove('hidden');
+          document.getElementById('avatar-initials').classList.add('hidden');
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function previewPhoto(event, elementId) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById(elementId).innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover">`;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function saveMeasurements() {
+      alert('Body measurements saved successfully!');
+    }
+
+    function addWeightLog() {
+      const val = document.getElementById('log-weight-input').value;
+      if (val) {
+        const list = document.getElementById('weight-history-list');
+        const newEntry = document.createElement('div');
+        newEntry.className = 'flex justify-between bg-brand-black p-2 rounded-lg border border-brand-greyBorder text-brand-yellow';
+        newEntry.innerHTML = `<span>Today</span><span class="font-bold">${val} kg</span>`;
+        list.prepend(newEntry);
+        document.getElementById('stat-current-weight').innerText = val + ' kg';
+        document.getElementById('log-weight-input').value = '';
+      }
+    }
+
+    function calculateAndNavigate() {
+      const age = Number(document.getElementById('quick-age').value) || 30;
+      const weight = Number(document.getElementById('quick-weight').value) || 70;
+      const height = Number(document.getElementById('quick-height').value) || 170;
+      const gender = document.getElementById('quick-gender').value;
+      const activity = Number(document.getElementById('quick-activity').value);
+
+      let bmr = (10 * weight) + (6.25 * height) - (5 * age);
+      bmr = (gender === 'male') ? bmr + 5 : bmr - 161;
+      bmr = Math.round(bmr);
+
+      let tdee = Math.round(bmr * activity);
+      let deficitTarget = Math.round(tdee - 400);
+
+      document.getElementById('calc-bmr').innerText = bmr;
+      document.getElementById('calc-tdee').innerText = tdee;
+      document.getElementById('calc-target').innerText = deficitTarget;
+
+      document.getElementById('calc-protein').innerText = Math.round(weight * 1.6) + 'g';
+      document.getElementById('calc-carbs').innerText = Math.round((deficitTarget * 0.45) / 4) + 'g';
+      document.getElementById('calc-fats').innerText = Math.round((deficitTarget * 0.25) / 9) + 'g';
+
+      document.getElementById('plan-user-meta').innerText = `Age: ${age} | Weight: ${weight} kg | Height: ${height} cm`;
+
+      switchTab('plan');
+    }
+
+    function setDietType(type) {
+      const bVeg = document.getElementById('btn-diet-veg');
+      const bEgg = document.getElementById('btn-diet-egg');
+      const bNon = document.getElementById('btn-diet-nonveg');
+
+      [bVeg, bEgg, bNon].forEach(b => {
+        if(b) b.className = 'bg-brand-black text-slate-300 font-semibold py-2 rounded-lg border border-brand-greyBorder';
+      });
+
+      if (type === 'veg') {
+        if(bVeg) bVeg.className = 'bg-brand-yellow text-black font-extrabold py-2 rounded-lg border border-brand-yellow';
+        document.getElementById('breakfast-content').innerHTML = `
+          <p><strong>• Option 1 (Moong Dal Cheela):</strong> 2 Moong dal cheelas (50g raw split moong dal) + 50g paneer stuffing.</p>
+          <p><strong>• Option 2 (Oats Veg Idli):</strong> 3 small steamed oats idlis (50g oats) + sambhar.</p>`;
+        document.getElementById('lunch-content').innerHTML = `
+          <p><strong>• Option 1 (Multigrain Thali):</strong> 2 Phulkas (50g atta) + 1 bowl Dal + green veg + salad.</p>
+          <p><strong>• Option 2 (Quinoa Bowl):</strong> 50g raw cooked quinoa + 100g sauteed veggies + 75g paneer.</p>`;
+        document.getElementById('dinner-content').innerHTML = `
+          <p><strong>• Option 1 (Dalia Khichdi):</strong> 40g raw moong dal & broken wheat khichdi with veggies.</p>
+          <p><strong>• Option 2 (Soup & Paneer):</strong> 1 bowl clear vegetable soup + 75g paneer slices.</p>`;
+      } else if (type === 'egg') {
+        if(bEgg) bEgg.className = 'bg-brand-yellow text-black font-extrabold py-2 rounded-lg border border-brand-yellow';
+        document.getElementById('breakfast-content').innerHTML = `
+          <p><strong>• Option 1 (Whole Eggs & Toast):</strong> 2 whole boiled eggs + 2 egg white omelette + 1 slice brown bread.</p>
+          <p><strong>• Option 2 (Egg Bhurji):</strong> 3 eggs bhurji with spinach + 1 phulka.</p>`;
+        document.getElementById('lunch-content').innerHTML = `
+          <p><strong>• Option 1 (Egg Curry Lunch):</strong> 3 egg curry + 1-2 Phulkas + 1 bowl cucumber salad.</p>
+          <p><strong>• Option 2 (Quinoa Egg Bowl):</strong> 50g cooked quinoa + 3 boiled eggs + sauteed veggies.</p>`;
+        document.getElementById('dinner-content').innerHTML = `
+          <p><strong>• Option 1 (Egg White Omelette):</strong> 4 egg whites omelette with tomatoes & mushrooms.</p>
+          <p><strong>• Option 2 (Soup & Eggs):</strong> 1 bowl vegetable soup + 3 boiled egg whites.</p>`;
+      } else if (type === 'nonveg') {
+        if(bNon) bNon.className = 'bg-brand-yellow text-black font-extrabold py-2 rounded-lg border border-brand-yellow';
+        document.getElementById('breakfast-content').innerHTML = `
+          <p><strong>• Option 1 (Chicken Omelette):</strong> 3 egg white omelette with 50g shredded chicken breast.</p>
+          <p><strong>• Option 2 (Egg Toast):</strong> 2 whole eggs poached on multigrain toast.</p>`;
+        document.getElementById('lunch-content').innerHTML = `
+          <p><strong>• Option 1 (Grilled Chicken Thali):</strong> 150g raw weighed grilled chicken breast + 1 Phulka + cucumber salad.</p>
+          <p><strong>• Option 2 (Fish Curry):</strong> 150g steamed/curried fish + 1/2 bowl steamed rice.</p>`;
+        document.getElementById('dinner-content').innerHTML = `
+          <p><strong>• Option 1 (Chicken Soup Bowl):</strong> Clear chicken broth with 120g shredded chicken & carrots.</p>
+          <p><strong>• Option 2 (Grilled Fish):</strong> 150g griddled fish with lemon water & sauteed veggies.</p>`;
+      }
+    }
+  </script>
+</body>
+</html>
