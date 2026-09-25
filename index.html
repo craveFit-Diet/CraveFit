@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>FITGO - Fitness that fits your life.</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background-color: #090d16; color: #f1f5f9; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    .glass-card { background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(255, 255, 255, 0.08); backdrop-filter: blur(12px); }
+    .fitgo-header { background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%); border: 1px solid rgba(59, 130, 246, 0.3); }
+    @media print {
+      body { background-color: #ffffff !important; color: #000000 !important; }
+      nav, header, button, .no-print { display: none !important; }
+      .glass-card, .fitgo-header { background: #ffffff !important; color: #000000 !important; border: 1px solid #ccc !important; }
+      .text-blue-400, .text-emerald-400, .text-amber-400, .text-cyan-400 { color: #000000 !important; font-weight: bold !important; }
+    }
+  </style>
+</head>
+<body class="pb-28 text-slate-200 antialiased">
+
+  <header class="sticky top-0 z-50 bg-slate-900/90 border-b border-slate-800/80 px-4 py-3 flex justify-between items-center backdrop-blur-md">
+    <div class="flex items-center gap-2 cursor-pointer" onclick="switchTab('home')">
+      <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-3 py-1 rounded-xl text-white font-black text-base tracking-wider shadow-lg shadow-blue-500/20">
+        FITGO
+      </div>
+      <span class="text-[10px] bg-blue-500/10 border border-blue-500/20 text-blue-400 px-2 py-0.5 rounded-full font-semibold">PRO</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <button onclick="switchTab('subscription')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs px-3 py-1.5 rounded-full transition shadow-md shadow-emerald-600/30">
+        12-Wk Plan
+      </button>
+      <button onclick="switchTab('assess')" class="bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs px-3 py-1.5 rounded-full transition shadow-md shadow-blue-600/30">
+        Free Assessment
+      </button>
+    </div>
+  </header>
+
+  <main class="max-w-md mx-auto p-4 space-y-4">
+
+    <div id="tab-home" class="space-y-5 pt-2">
+      
+      <div class="text-center space-y-2">
+        <div class="inline-block bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-1.5 rounded-2xl text-white font-black text-3xl tracking-wider shadow-xl shadow-blue-500/20 mb-1">
+          FITGO
+        </div>
+        <h1 class="text-xl font-extrabold text-white leading-tight">
+          Fitness that fits your life.
+        </h1>
+        <p class="text-blue-400 text-xs font-semibold tracking-wide uppercase">
+          Eat Better. Train Smarter. Live Stronger.
+        </p>
+      </div>
+
+      <div class="glass-card rounded-2xl p-5 text-center space-y-3 border border-blue-500/20 shadow-xl">
+        <h2 class="text-base font-bold text-blue-200">Start Free Assessment</h2>
+        <p class="text-xs text-slate-300">Calculate BMR/TDEE & generate your customized 6-meal metabolic nutrition blueprint in 2 minutes.</p>
+        <button onclick="switchTab('assess')" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl text-xs transition shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2">
+          Assess Yourself Now →
+        </button>
+      </div>
+
+      <div class="space-y-3">
+        <div class="flex justify-between items-center px-1">
+          <h3 class="text-xs font-bold text-white tracking-wider uppercase">🔥 Client Transformations</h3>
+          <span class="text-[10px] text-emerald-400 font-semibold">100+ Success Stories</span>
+        </div>
+
+        <div class="glass-card rounded-2xl p-4 space-y-3 border border-slate-800">
+          <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+            <div>
+              <h4 class="text-xs font-bold text-white">Mrs. Nagalakshmi (Age 62)</h4>
+              <p class="text-[10px] text-slate-400">Safe Tummy Fat Reduction Program</p>
+            </div>
+            <span class="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] px-2 py-0.5 rounded-full font-bold">
+              -6.2 kg in 8 Wks
+            </span>
+          </div>
+          <p class="text-xs text-slate-300 italic">
+            "Reduced visceral fat and acidity without skipping meals. The Saunf-Jeera morning routine and raw-weight portions kept my energy levels high throughout the day."
+          </p>
+          <div class="grid grid-cols-3 gap-2 text-center text-[10px]">
+            <div class="bg-slate-950 p-2 rounded-lg border border-slate-800">
+              <span class="text-slate-400 block">Start</span>
+              <span class="font-bold text-slate-200">68.5 kg</span>
+            </div>
+            <div class="bg-slate-950 p-2 rounded-lg border border-slate-800">
+              <span class="text-slate-400 block">Current</span>
+              <span class="font-bold text-emerald-400">62.3 kg</span>
+            </div>
+            <div class="bg-slate-950 p-2 rounded-lg border border-slate-800">
+              <span class="text-slate-400 block">Visceral Fat</span>
+              <span class="font-bold text-blue-400">-2 Levels</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-4 space-y-3 border border-slate-800">
+          <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+            <div>
+              <h4 class="text-xs font-bold text-white">Rajesh Kumar (Age 38)</h4>
+              <p class="text-[10px] text-slate-400">Executive Recomposition</p>
+            </div>
+            <span class="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] px-2 py-0.5 rounded-full font-bold">
+              -9.5 kg in 12 Wks
+            </span>
+          </div>
+          <p class="text-xs text-slate-300 italic">
+            "Structured evening snacks (roasted makhana) prevented late-night junk cravings. Lost 4 inches off my waist while maintaining strength."
+          </p>
+        </div>
+      </div>
+
+      <div class="bg-gradient-to-r from-emerald-950 to-slate-900 border border-emerald-500/30 rounded-2xl p-4 text-center space-y-2">
+        <h3 class="text-xs font-bold text-emerald-300">Need Personalized Direct Coaching?</h3>
+        <p class="text-[11px] text-slate-300">Chat directly with lead nutritionist on WhatsApp for personalized 1-on-1 guidance.</p>
+        <a href="https://wa.me/919000000000?text=Hi%20FITGO,%20I%20want%20to%20know%20more%20about%20the%2012-Week%20Metabolic%20Coaching%20Program." target="_blank" className="block">
+          <button class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-xl text-xs transition shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2">
+            💬 Chat on WhatsApp (+91 90000 00000)
+          </button>
+        </a>
+      </div>
+    </div>
+
+    <div id="tab-assess" class="hidden space-y-3 pt-2">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+        <h2 class="text-xs font-bold text-white">FITGO Assessment Engine</h2>
+        <span class="text-[10px] text-slate-400">Step 1 of 1</span>
+      </div>
+
+      <div class="glass-card rounded-2xl p-4 space-y-3 border border-slate-800">
+        <div>
+          <label class="text-[11px] text-slate-400 block mb-1">Full Name</label>
+          <input type="text" id="input-name" value="Mrs. Nagalakshmi" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:border-blue-500 outline-none">
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="text-[11px] text-slate-400 block mb-1">Age (Yrs)</label>
+            <input type="number" id="input-age" value="62" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white">
+          </div>
+          <div>
+            <label class="text-[11px] text-slate-400 block mb-1">Current Weight (kg)</label>
+            <input type="number" id="input-weight" value="65.2" step="0.1" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white">
+          </div>
+        </div>
+
+        <div>
+          <label class="text-[11px] text-slate-400 block mb-1">Primary Goal</label>
+          <select id="input-goal" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white">
+            <option>Safe Tummy Fat Reduction & Active Aging</option>
+            <option>Fat Loss & Lean Muscle Preservation</option>
+            <option>Body Recomposition & Energy Boost</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-[11px] text-slate-400 block mb-1">Diet Preference</label>
+          <select id="input-diet" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white">
+            <option>100% PURE VEGETARIAN NUTRITION PLAN</option>
+            <option>HIGH PROTEIN EGGETARIAN PLAN</option>
+            <option>BALANCED NON-VEGETARIAN PLAN</option>
+          </select>
+        </div>
+
+        <button onclick="generatePlan()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl text-xs shadow-lg shadow-emerald-600/20 transition">
+          Generate FITGO Blueprint →
+        </button>
+      </div>
+    </div>
+
+    <div id="tab-plan" class="hidden space-y-3 pt-2">
+
+      <div class="fitgo-header rounded-2xl p-4 space-y-2 text-white shadow-xl">
+        <div class="text-[9px] tracking-wider text-blue-200 uppercase font-bold border-b border-blue-700/50 pb-1 flex justify-between">
+          <span>FITGO NUTRITION ENGINE</span>
+          <span class="text-emerald-400">STATUS: ACTIVE</span>
+        </div>
+        <div class="text-xs tracking-wider text-blue-300 font-bold uppercase">
+          METABOLIC & VISCERAL FAT OPTIMIZATION BLUEPRINT
+        </div>
+        <h2 id="plan-name" class="text-base font-extrabold text-white">Mrs. Nagalakshmi</h2>
+        <div class="grid grid-cols-2 gap-1 text-[11px] text-blue-100">
+          <div>AGE / HEIGHT: <span id="plan-age">62</span> Yrs / 5'2"</div>
+          <div>WEIGHT: <span id="plan-weight">65.2</span> kg</div>
+        </div>
+        <div class="text-[11px] text-emerald-300 font-medium" id="plan-goal">
+          GOAL: Safe Tummy Fat Reduction & Active Aging
+        </div>
+      </div>
+
+      <div class="grid grid-cols-4 gap-1.5 text-center">
+        <div class="glass-card p-2 rounded-xl">
+          <div id="macro-kcal" class="text-blue-400 text-xs font-bold">~1180</div>
+          <div class="text-[8px] text-slate-400 uppercase">kcal Daily</div>
+        </div>
+        <div class="glass-card p-2 rounded-xl">
+          <div id="macro-p" class="text-emerald-400 text-xs font-bold">~50g</div>
+          <div class="text-[8px] text-slate-400 uppercase">Protein</div>
+        </div>
+        <div class="glass-card p-2 rounded-xl">
+          <div id="macro-c" class="text-amber-400 text-xs font-bold">~130g</div>
+          <div class="text-[8px] text-slate-400 uppercase">Carbs</div>
+        </div>
+        <div class="glass-card p-2 rounded-xl">
+          <div id="macro-f" class="text-cyan-400 text-xs font-bold">~36g | 2.5L</div>
+          <div class="text-[8px] text-slate-400 uppercase">Fat / Water</div>
+        </div>
+      </div>
+
+      <div class="glass-card rounded-2xl p-3.5 space-y-3 border border-slate-800">
+        <div class="border-b border-slate-800 pb-1.5 flex justify-between items-center">
+          <span id="diet-header-label" class="text-[10px] font-bold text-emerald-400 tracking-wide uppercase">
+            100% PURE VEGETARIAN NUTRITION PLAN (RAW WEIGHTS)
+          </span>
+        </div>
+
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-amber-300">06:30 AM — MORNING ROUTINE</span>
+            <span class="bg-amber-950/60 text-amber-300 text-[8px] px-2 py-0.5 rounded-full font-mono border border-amber-800/60">
+              Metabolic Booster
+            </span>
+          </div>
+          <div class="bg-slate-950 p-2.5 rounded-xl text-xs space-y-1 text-slate-300 border border-slate-800/80">
+            <p><strong class="text-slate-200">• Saunf-Jeera Pani:</strong> Boil 1/2 tsp fennel seeds + 1/2 tsp cumin seeds in 300ml water. Sip warm.</p>
+            <p><strong class="text-slate-200">• Soaked Nuts:</strong> 4 soaked almonds (peeled) + 2 soaked walnut halves.</p>
+          </div>
+        </div>
+
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-blue-300">09:30 AM — BREAKFAST</span>
+            <span class="bg-sky-950 text-sky-300 text-[8px] px-2 py-0.5 rounded-full font-mono border border-sky-800/60">
+              ~300 Kcal | P: 14g | C: 42g
+            </span>
+          </div>
+          <div class="bg-slate-950 p-2.5 rounded-xl text-xs space-y-1 text-slate-300 border border-slate-800/80">
+            <p><strong class="text-slate-200">• Option 1 (Paneer Moong Cheela):</strong> 2 Moong Dal Cheelas (40g raw split moong dal) stuffed with 25g crumbled paneer + 50g bottle gourd.</p>
+            <p><strong class="text-slate-200">• Option 2 (Oats Veg Idli):</strong> 3 small steamed oats idlis (40g raw oats powder) served with 1 bowl vegetable sambhar.</p>
+          </div>
+        </div>
+
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-purple-300">11:30 AM — MID-MORNING FRUIT</span>
+            <span class="bg-purple-950/60 text-purple-300 text-[8px] px-2 py-0.5 rounded-full font-mono border border-purple-800/60">
+              ~90 Kcal | Fibre Boost
+            </span>
+          </div>
+          <div class="bg-slate-950 p-2.5 rounded-xl text-xs space-y-1 text-slate-300 border border-slate-800/80">
+            <p><strong class="text-slate-200">• Fresh Fruit Option:</strong> 150g Papaya OR 1 small Apple OR 1 Guava + 1 tsp soaked chia seeds in water.</p>
+          </div>
+        </div>
+
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-blue-300">01:30 PM — LUNCH</span>
+            <span class="bg-sky-950 text-sky-300 text-[8px] px-2 py-0.5 rounded-full font-mono border border-sky-800/60">
+              ~420 Kcal | P: 18g | C: 52g
+            </span>
+          </div>
+          <div class="bg-slate-950 p-2.5 rounded-xl text-xs space-y-1 text-slate-300 border border-slate-800/80">
+            <p><strong class="text-slate-200">• Option 1 (Balanced Thali):</strong> 1 Multigrain Phulka (30g atta) + 1 bowl Dal (30g raw dal) + 1 bowl green vegetable in 5g oil + 100g cucumber salad.</p>
+            <p><strong class="text-slate-200">• Option 2 (Quinoa Bowl):</strong> 40g raw cooked quinoa with 100g sauteed vegetables + 50g paneer cubes.</p>
+          </div>
+        </div>
+
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-amber-300">05:30 PM — EVENING SNACK</span>
+            <span class="bg-amber-950/60 text-amber-300 text-[8px] px-2 py-0.5 rounded-full font-mono border border-amber-800/60">
+              ~110 Kcal | P: 5g
+            </span>
+          </div>
+          <div class="bg-slate-950 p-2.5 rounded-xl text-xs space-y-1 text-slate-300 border border-slate-800/80">
+            <p><strong class="text-slate-200">• Crunchy Option:</strong> 25g dry-roasted Makhana (foxnuts) OR 30g dry-roasted Chana + 1 cup Herbal / Green Tea (no sugar).</p>
+          </div>
+        </div>
+
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-blue-300">08:00 PM — DINNER</span>
+            <span class="bg-sky-950 text-sky-300 text-[8px] px-2 py-0.5 rounded-full font-mono border border-sky-800/60">
+              ~260 Kcal | Easy Digestion
+            </span>
+          </div>
+          <div class="bg-slate-950 p-2.5 rounded-xl text-xs space-y-1 text-slate-300 border border-slate-800/80">
+            <p><strong class="text-slate-200">• Option 1 (Vegetable Dalia Khichdi):</strong> 35g raw moong dal & broken wheat khichdi loaded with lauki, spinach & carrots cooked in 3g ghee.</p>
+            <p><strong class="text-slate-200">• Option 2 (Lauki Soup & Paneer):</strong> 1 bowl clear lauki/tomato soup + 50g griddled paneer slices.</p>
+          </div>
+        </div>
+
+        <div class="space-y-1">
+          <span class="text-[10px] font-bold text-slate-400 uppercase">10:00 PM — BEDTIME ROUTINE</span>
+          <p class="text-xs text-slate-400 pl-2">100ml warm turmeric water or chamomile tea for restful sleep and digestion recovery.</p>
+        </div>
+      </div>
+
+      <button onclick="window.print()" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-semibold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 border border-slate-700 transition">
+        🖨️ Download / Print FITGO Blueprint PDF
+      </button>
+    </div>
+
+    <div id="tab-subscription" class="hidden space-y-4 pt-2">
+      <div class="text-center space-y-1">
+        <h2 class="text-base font-bold text-white">FITGO Coaching Programs</h2>
+        <p class="text-xs text-slate-400">Structured 1-on-1 metabolic fat loss and active aging plans.</p>
+      </div>
+
+      <div class="glass-card rounded-2xl p-5 space-y-3 border-2 border-blue-500/50 relative overflow-hidden">
+        <div class="bg-blue-600 text-white text-[9px] font-bold px-3 py-1 absolute top-0 right-0 rounded-bl-xl uppercase tracking-wider">
+          MOST POPULAR
+        </div>
+        <h3 class="text-base font-bold text-white">12-Week Metabolic Transformation</h3>
+        <div class="text-2xl font-black text-blue-400">₹14,999 <span class="text-xs text-slate-400 font-normal">/ 3 Months</span></div>
+        
+        <ul class="text-xs text-slate-300 space-y-1.5 border-t border-slate-800 pt-3">
+          <li class="flex items-center gap-2">✓ Personalized Raw Weight Meal Plans</li>
+          <li class="flex items-center gap-2">✓ Weekly Macro Adjustments & Progress Reviews</li>
+          <li class="flex items-center gap-2">✓ Direct 1-on-1 WhatsApp Support</li>
+          <li class="flex items-center gap-2">✓ Gentle Home Mobility & Stretching Routines</li>
+          <li class="flex items-center gap-2">✓ Printable PDF Blueprint Generator Access</li>
+        </ul>
+
+        <a href="https://wa.me/919000000000?text=Hi%20FITGO,%20I%20want%20to%20enroll%20in%20the%2012-Week%20Metabolic%20Coaching%20Program%20(₹14,999)." target="_blank" className="block pt-2">
+          <button class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl text-xs transition shadow-lg shadow-emerald-600/30">
+            Enroll via WhatsApp (+91 90000 00000)
+          </button>
+        </a>
+      </div>
+
+      <div class="glass-card rounded-2xl p-4 space-y-2 border border-slate-800">
+        <h3 class="text-sm font-bold text-white">4-Week Jumpstart Plan</h3>
+        <div class="text-xl font-bold text-emerald-400">₹5,999 <span class="text-xs text-slate-400 font-normal">/ Month</span></div>
+        <a href="https://wa.me/919000000000?text=Hi%20FITGO,%20I%20want%20to%20know%20about%20the%204-Week%20Jumpstart%20Plan%20(₹5,999)." target="_blank" className="block pt-1">
+          <button class="w-full bg-slate-800 hover:bg-slate-700 text-white font-semibold py-2 rounded-xl text-xs border border-slate-700">
+            Inquire via WhatsApp
+          </button>
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <nav class="fixed bottom-0 left-0 right-0 bg-slate-900/95 border-t border-slate-800 px-4 py-2.5 flex justify-around text-slate-400 text-xs z-50 backdrop-blur-md">
+    <button onclick="switchTab('home')" class="flex flex-col items-center gap-0.5">
+      <span>🏠</span> Home
+    </button>
+    <button onclick="switchTab('assess')" class="flex flex-col items-center gap-0.5">
+      <span>📋</span> Assess
+    </button>
+    <button onclick="switchTab('plan')" class="flex flex-col items-center gap-0.5">
+      <span>🥗</span> Diet Plan
+    </button>
+    <button onclick="switchTab('subscription')" class="flex flex-col items-center gap-0.5 text-emerald-400 font-medium">
+      <span>💎</span> Plans
+    </button>
+  </nav>
+
+  <script>
+    function switchTab(tabId) {
+      document.getElementById('tab-home').classList.add('hidden');
+      document.getElementById('tab-assess').classList.add('hidden');
+      document.getElementById('tab-plan').classList.add('hidden');
+      document.getElementById('tab-subscription').classList.add('hidden');
+      document.getElementById('tab-' + tabId).classList.remove('hidden');
+      window.scrollTo(0,0);
+    }
+
+    function generatePlan() {
+      const name = document.getElementById('input-name').value || 'Client';
+      const age = Number(document.getElementById('input-age').value) || 30;
+      const weight = Number(document.getElementById('input-weight').value) || 60;
+      const goal = document.getElementById('input-goal').value;
+      const diet = document.getElementById('input-diet').value;
+
+      document.getElementById('plan-name').innerText = name;
+      document.getElementById('plan-age').innerText = age;
+      document.getElementById('plan-weight').innerText = weight;
+      document.getElementById('plan-goal').innerText = 'GOAL: ' + goal;
+      document.getElementById('diet-header-label').innerText = diet + ' (RAW WEIGHTS)';
+
+      // Mifflin-St Jeor Formula
+      let bmr = (10 * weight) + (6.25 * 160) - (5 * age) - 161;
+      let targetKcal = Math.round(bmr * 1.2 - 200);
+      if (targetKcal < 1100) targetKcal = 1180;
+
+      document.getElementById('macro-kcal').innerText = '~' + targetKcal;
+      document.getElementById('macro-p').innerText = '~' + Math.round((targetKcal * 0.20) / 4) + 'g';
+      document.getElementById('macro-c').innerText = '~' + Math.round((targetKcal * 0.50) / 4) + 'g';
+      document.getElementById('macro-f').innerText = '~' + Math.round((targetKcal * 0.30) / 9) + 'g | 2.5L';
+
+      switchTab('plan');
+    }
+  </script>
+</body>
+</html>
